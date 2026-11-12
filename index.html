@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>stasOS — Клиент нового поколения</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <canvas id="bg-particles"></canvas>
+
+    <nav class="navbar">
+        <div class="logo"><span>stas</span>OS</div>
+        <div class="nav-links">
+            <a href="#features">Функции</a>
+            <a href="#pricing">Цены</a>
+            <a href="https://t.me/stasOS_Cheat_bot" class="btn-nav">Купить</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1 class="hero-title">Клиент, который <br><span class="accent">меняет правила</span></h1>
+        <p class="hero-subtitle">Нативная скорость, безопасность и дизайн, который приятно ощущать. Добро пожаловать в stasOS.</p>
+        <div class="hero-buttons">
+            <a href="https://t.me/stasOS_Cheat_bot" class="btn-primary">Купить ключ</a>
+            <a href="#features" class="btn-secondary">Узнать больше</a>
+        </div>
+
+        <!-- Красивое окно (заглушка под скрин) -->
+        <div class="window-preview">
+            <div class="window-header">
+                <div class="dots"><span></span><span></span><span></span></div>
+                <div class="window-title">stasOS v2.1.0</div>
+            </div>
+            <div class="window-body">
+                <div class="sidebar-preview">
+                    <div class="nav-preview active">Combat</div>
+                    <div class="nav-preview">Movement</div>
+                    <div class="nav-preview">Visuals</div>
+                </div>
+                <div class="main-preview">
+                    <div class="card-preview"></div>
+                    <div class="card-preview"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="features" class="features">
+        <h2 class="section-title">Почему stasOS?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon">⚡</div>
+                <h3>Нативная скорость</h3>
+                <p>Клиент написан на Rust и JS. Работает быстрее, чем все конкуренты. Запуск за 0.1 секунды.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🛡</div>
+                <h3>Абсолютная безопасность</h3>
+                <p>Многоуровневая защита от слива, маскировка в системе, обход античитов.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🎨</div>
+                <h3>Уникальный дизайн</h3>
+                <p>Стеклянные панели, кастомные цвета, встроенный HUD и плавные анимации.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🕹</div>
+                <h3>Игровое меню</h3>
+                <p>ClickGUI прямо в игре. Нажми Right Shift и включай нужные модули мышкой.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+        <h2 class="section-title">Выбери свой тариф</h2>
+        <div class="pricing-grid">
+            <div class="price-card">
+                <h3>30 Дней</h3>
+                <div class="price">150 ⭐</div>
+                <ul>
+                    <li>Все функции</li>
+                    <li>Обновления</li>
+                    <li>HUD в игре</li>
+                </ul>
+                <a href="https://t.me/stasOS_Cheat_bot" class="btn-buy">Купить</a>
+            </div>
+            <div class="price-card popular">
+                <div class="badge">Популярное</div>
+                <h3>90 Дней</h3>
+                <div class="price">400 ⭐</div>
+                <ul>
+                    <li>Все функции</li>
+                    <li>Обновления</li>
+                    <li>HUD в игре</li>
+                    <li>Приоритетная поддержка</li>
+                </ul>
+                <a href="https://t.me/stasOS_Cheat_bot" class="btn-buy">Купить</a>
+            </div>
+            <div class="price-card">
+                <h3>Навсегда</h3>
+                <div class="price">1000 ⭐</div>
+                <ul>
+                    <li>Все функции</li>
+                    <li>Обновления навсегда</li>
+                    <li>HUD в игре</li>
+                    <li>Доступ к бете</li>
+                </ul>
+                <a href="https://t.me/stasOS_Cheat_bot" class="btn-buy">Купить</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="logo"><span>stas</span>OS</div>
+        <p>© 2026 stasOS. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
