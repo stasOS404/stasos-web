@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Бесплатные скрипты | stasOS</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Дополнительные стили */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+        .info-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            backdrop-filter: blur(20px);
+        }
+        .info-card h3 {
+            color: var(--accent);
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        .info-card p {
+            color: var(--text-dim);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .script-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 100px;
+        }
+        .script-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .script-card:hover {
+            border-color: rgba(198, 244, 50, 0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            transform: translateY(-5px);
+        }
+        .script-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .script-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .script-title span { color: var(--accent); }
+        .badge-free {
+            background: rgba(198, 244, 50, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        .script-desc {
+            color: var(--text-dim);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        .script-features {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .feature-tag {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .copy-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 16px 30px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            letter-spacing: 1px;
+        }
+        .copy-btn:hover {
+            box-shadow: 0 0 30px rgba(198, 244, 50, 0.5);
+            transform: scale(1.02);
+        }
+        .copy-btn:active { transform: scale(0.98); }
+        
+        .toast {
+            position: fixed; bottom: 30px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--accent); color: var(--bg);
+            padding: 15px 30px; border-radius: 12px;
+            font-weight: 800; font-size: 16px;
+            box-shadow: 0 10px 30px rgba(198, 244, 50, 0.4);
+            opacity: 0; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 9999; display: flex; align-items: center; gap: 10px;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+    <canvas id="bg-particles"></canvas>
+
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><span>stas</span>OS</div>
+        <div class="nav-links">
+            <a href="index.html">Главная</a>
+            <a href="index.html#pricing">Купить для MC</a>
+            <a href="https://t.me/stasOS_Cheat_bot" class="btn-nav">Telegram</a>
+        </div>
+    </nav>
+
+    <header class="hero" style="min-height: auto; padding-top: 120px; padding-bottom: 40px;">
+        <h1 class="hero-title">Скрипты <span class="accent">для Roblox</span></h1>
+        <p class="hero-subtitle">Абсолютно бесплатная база скриптов. Мы делаем их для души и обновляем каждую неделю.</p>
+    </header>
+
+    <!-- ИНФОРМАЦИОННЫЕ БЛОКИ -->
+    <div class="info-grid">
+        <div class="info-card">
+            <h3>📖 Что это такое?</h3>
+            <p>Это Lua-скрипты, которые внедряются в игру. Они дают преимущество: подсветка игроков через стены, авто-подбор оружия, полёт и многое другое.</p>
+        </div>
+        <div class="info-card">
+            <h3>🚀 Как использовать?</h3>
+            <p>1. Скачай любой инжектор (Delta, Wave, Xeno).<br>2. Запусти Roblox.<br>3. Нажми «Inject».<br>4. Скопируй код с сайта и вставь в консоль.</p>
+        </div>
+        <div class="info-card">
+            <h3>🔥 База пополняется!</h3>
+            <p>Мы регулярно добавляем новые скрипты для популярных игр (Arsenal, Blox Fruits, MM2). Добавляй сайт в закладки, чтобы не пропустить.</p>
+        </div>
+    </div>
+
+    <div class="script-container">
+        
+        <div class="script-card">
+            <div class="script-header">
+                <div class="script-title">🔪 Murder Mystery 2 <span>ULTRA</span></div>
+                <div class="badge-free">FREE</div>
+            </div>
+            <div class="script-desc">
+                Мощный скрипт для MM2. Показывает роли (Маньяк, Шериф, Мирный) через стены, подсвечивает оружие и автоматически к нему телепортирует.
+            </div>
+            <div class="script-features">
+                <div class="feature-tag">Role ESP</div>
+                <div class="feature-tag">Item ESP</div>
+                <div class="feature-tag">Auto Pickup</div>
+                <div class="feature-tag">In-Game Menu</div>
+            </div>
+            <button class="copy-btn" onclick="copyCode('mm2-code')">📋 СКОПИРОВАТЬ КОД</button>
+            <div id="mm2-code" style="display:none;">
+-- Вставь этот код в инжектор
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local Workspace = game:GetService("Workspace")
+
+local ACCENT = Color3.fromRGB(198, 244, 50)
+local ROLE_COLORS = {
+    ["Murderer"] = Color3.fromRGB(255, 71, 87),
+    ["Sheriff"] = Color3.fromRGB(52, 152, 219),
+    ["Innocent"] = Color3.fromRGB(198, 244, 50)
+}
+
+local espEnabled = true
+local itemEspEnabled = true
+local autoPickupEnabled = false
+
+local function updateRoles()
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player == LocalPlayer then continue end
+        if not player.Character then continue end
+        local char = player.Character
+        local humanoid = char:FindFirstChild("Humanoid")
+        if not humanoid then continue end
+        local role = "Innocent"
+        local color = ROLE_COLORS.Innocent
+        local backpack = player:FindFirstChild("Backpack")
+        local hasKnife = false
+        local hasGun = false
+        if backpack then
+            for _, item in ipairs(backpack:GetChildren()) do
+                if item.Name == "Knife" then hasKnife = true end
+                if item.Name == "Gun" then hasGun = true end
+            end
+        end
+        if char:FindFirstChild("Knife") then hasKnife = true end
+        if char:FindFirstChild("Gun") then hasGun = true end
+        if hasKnife then role = "Murderer"; color = ROLE_COLORS.Murderer end
+        if hasGun then role = "Sheriff"; color = ROLE_COLORS.Sheriff end
+        local highlight = char:FindFirstChild("stasOS_Highlight")
+        if not highlight then
+            highlight = Instance.new("Highlight")
+            highlight.Name = "stasOS_Highlight"
+            highlight.Parent = char
+        end
+        highlight.FillColor = color
+        highlight.OutlineColor = Color3.new(1,1,1)
+        highlight.Enabled = espEnabled
+        local billboard = char:FindFirstChild("stasOS_Billboard")
+        if not billboard and char:FindFirstChild("Head") then
+            billboard = Instance.new("BillboardGui")
+            billboard.Name = "stasOS_Billboard"
+            billboard.Size = UDim2.new(0, 200, 0, 50)
+            billboard.StudsOffset = Vector3.new(0, 2.5, 0)
+            billboard.AlwaysOnTop = true
+            billboard.Parent = char.Head
+            local label = Instance.new("TextLabel")
+            label.Name = "RoleText"
+            label.Size = UDim2.new(1, 0, 1, 0)
+            label.BackgroundTransparency = 1
+            label.TextScaled = true
+            label.Font = Enum.Font.GothamBlack
+            label.TextStrokeTransparency = 0
+            label.Parent = billboard
+        end
+        if billboard then
+            billboard.Enabled = espEnabled
+            local label = billboard:FindFirstChild("RoleText")
+            if label then
+                label.Text = player.Name .. " [" .. role .. "]"
+                label.TextColor3 = color
+            end
+        end
+    end
+end
+
+local function updateItems()
+    for _, item in ipairs(Workspace:GetChildren()) do
+        if item.Name == "Knife" or item.Name == "Gun" then
+            if item:IsA("Model") or item:IsA("Tool") then
+                local highlight = item:FindFirstChild("stasOS_ItemHighlight")
+                if not highlight then
+                    highlight = Instance.new("Highlight")
+                    highlight.Name = "stasOS_ItemHighlight"
+                    highlight.Parent = item
+                end
+                highlight.FillColor = (item.Name == "Gun") and ROLE_COLORS.Sheriff or ROLE_COLORS.Murderer
+                highlight.OutlineColor = Color3.new(1,1,1)
+                highlight.Enabled = itemEspEnabled
+            end
+        end
+    end
+end
+
+local function autoPickup()
+    if not autoPickupEnabled then return end
+    local char = LocalPlayer.Character
+    if not char then return end
+    local root = char:FindFirstChild("HumanoidRootPart")
+    if not root then return end
+    for _, item in ipairs(Workspace:GetChildren()) do
+        if item.Name == "Knife" or item.Name == "Gun" then
+            local itemPos = item:IsA("Model") and item.PrimaryPart.Position or item:IsA("Tool") and item.Handle.Position
+            if itemPos and (itemPos - root.Position).Magnitude < 10 then
+                root.CFrame = CFrame.new(itemPos)
+            end
+        end
+    end
+end
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "stasOS_MM2"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 250, 0, 180)
+MainFrame.Position = UDim2.new(0.5, -125, 0.5, -90)
+MainFrame.BackgroundColor3 = Color3.fromRGB(11, 11, 14)
+MainFrame.BorderSizePixel = 2
+MainFrame.BorderColor3 = ACCENT
+MainFrame.Parent = ScreenGui
+
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.BackgroundColor3 = ACCENT
+Title.Text = "stasOS | MM2"
+Title.TextColor3 = Color3.fromRGB(0, 0, 0)
+Title.Font = Enum.Font.GothamBlack
+Title.TextScaled = true
+Title.Parent = MainFrame
+
+local function createBtn(text, yPos)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(1, -20, 0, 30)
+    btn.Position = UDim2.new(0, 10, 0, yPos)
+    btn.BackgroundColor3 = Color3.fromRGB(22, 22, 26)
+    btn.Text = text
+    btn.TextColor3 = Color3.new(1,1,1)
+    btn.Font = Enum.Font.GothamBold
+    btn.Parent = MainFrame
+    return btn
+end
+
+local EspBtn = createBtn("Role ESP: ON", 40)
+local ItemBtn = createBtn("Item ESP: ON", 80)
+local PickupBtn = createBtn("Auto Pickup: OFF", 120)
+
+EspBtn.MouseButton1Click:Connect(function()
+    espEnabled = not espEnabled
+    EspBtn.Text = "Role ESP: " .. (espEnabled and "ON" or "OFF")
+    EspBtn.TextColor3 = espEnabled and ACCENT or Color3.new(1,1,1)
+end)
+
+ItemBtn.MouseButton1Click:Connect(function()
+    itemEspEnabled = not itemEspEnabled
+    ItemBtn.Text = "Item ESP: " .. (itemEspEnabled and "ON" or "OFF")
+    ItemBtn.TextColor3 = itemEspEnabled and ACCENT or Color3.new(1,1,1)
+end)
+
+PickupBtn.MouseButton1Click:Connect(function()
+    autoPickupEnabled = not autoPickupEnabled
+    PickupBtn.Text = "Auto Pickup: " .. (autoPickupEnabled and "ON" or "OFF")
+    PickupBtn.TextColor3 = autoPickupEnabled and ACCENT or Color3.new(1,1,1)
+end)
+
+RunService.RenderStepped:Connect(function()
+    updateRoles()
+    updateItems()
+    autoPickup()
+end)
+            </div>
+        </div>
+
+        <div class="script-card" style="opacity: 0.5;">
+            <div class="script-header">
+                <div class="script-title">⚔️ Arsenal <span>COMING SOON</span></div>
+                <div class="badge-free">FREE</div>
+            </div>
+            <div class="script-desc">
+                Скрипт для Arsenal (Aimbot, ESP, Fly). Мы работаем над ним прямо сейчас.
+            </div>
+            <button class="copy-btn" disabled style="background: #26262c; color: #555; cursor: not-allowed;">СКОРО</button>
+        </div>
+
+    </div>
+
+    <div id="toast" class="toast">
+        <span>✅</span> Скрипт скопирован! Вставь его в инжектор.
+    </div>
+
+    <footer>
+        <div class="logo"><span>stas</span>OS</div>
+        <p>© 2026 stasOS. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        function copyCode(id) {
+            const code = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(code);
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+    </script>
+</body>
+</html>
