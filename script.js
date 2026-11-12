@@ -104,7 +104,6 @@ document.addEventListener('keypress', (e) => {
 
 // 4. РЎРµРєСЂРµС‚РЅС‹Р№ СЌРєСЂР°РЅ
 function showSecretScreen() {
-    // РЎРѕР·РґР°РµРј СЌРєСЂР°РЅ, РµСЃР»Рё РµРіРѕ РЅРµС‚
     if (document.getElementById('secret-screen')) return;
 
     const screen = document.createElement('div');
@@ -112,19 +111,27 @@ function showSecretScreen() {
     screen.innerHTML = `
         <div class="secret-content">
             <h1 class="secret-logo"><span>stas</span>OS</h1>
-            <p class="secret-motto">РРіСЂР°Р№ РїРѕ СЃРІРѕРёРј РїСЂР°РІРёР»Р°Рј <span class="wink">;)</span></p>
+            <p class="secret-motto">Играй по своим правилам <span class="wink">;)</span></p>
         </div>
     `;
     document.body.appendChild(screen);
 
-    // РђРЅРёРјР°С†РёСЏ РїРѕСЏРІР»РµРЅРёСЏ
+    // Анимация появления
     setTimeout(() => {
         screen.classList.add('show');
     }, 100);
 
-    // РљР»РёРє РґР»СЏ Р·Р°РєСЂС‹С‚РёСЏ
+    // --- АВТОЗАКРЫТИЕ ---
+    // Через 2.5 секунды экран плавно исчезает
+    setTimeout(() => {
+        screen.classList.remove('show');
+        setTimeout(() => screen.remove(), 800); // Ждем окончания анимации и удаляем
+    }, 2500);
+
+    // Клик для ручного закрытия (на всякий случай)
     screen.addEventListener('click', () => {
         screen.classList.remove('show');
         setTimeout(() => screen.remove(), 800);
     });
 }
+
