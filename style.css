@@ -109,3 +109,98 @@ footer .logo { margin-bottom: 20px; color: var(--text); }
 }
 
 @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+/* ROADMAP */
+.roadmap {
+    padding: 100px 50px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.roadmap-container {
+    position: relative;
+    padding-left: 30px;
+    border-left: 2px solid var(--border);
+}
+.roadmap-item {
+    position: relative;
+    margin-bottom: 40px;
+}
+.roadmap-dot {
+    position: absolute;
+    left: -38px;
+    top: 5px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--text-dim);
+}
+.roadmap-item.done .roadmap-dot {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 15px var(--accent);
+}
+.roadmap-item.active .roadmap-dot {
+    background: var(--bg);
+    border-color: var(--accent);
+}
+.roadmap-item.active .roadmap-dot::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+}
+.roadmap-content h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+.roadmap-item.done .roadmap-content h3 { color: var(--accent); }
+.roadmap-item.future .roadmap-content h3 { color: var(--text-dim); }
+.roadmap-content p {
+    color: var(--text-dim);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* FAQ */
+.faq {
+    padding: 100px 50px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.faq-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+.faq-item {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 30px;
+    backdrop-filter: blur(20px);
+    transition: 0.3s;
+}
+.faq-item:hover {
+    border-color: rgba(198, 244, 50, 0.3);
+}
+.faq-item h3 {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: var(--text);
+}
+.faq-item p {
+    color: var(--text-dim);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+@media (max-width: 800px) {
+    .faq-grid { grid-template-columns: 1fr; }
+}
