@@ -146,3 +146,51 @@ window.addEventListener('scroll', () => {
 scrollTopBtn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
+
+// ПРОВЕРКА КЛЮЧА
+document.getElementById('key-check-btn').addEventListener('click', async () => {
+    const key = document.getElementById('key-input').value.trim().toUpperCase();
+    const statusDiv = document.getElementById('key-status');
+    
+    if (!key) {
+        statusDiv.innerText = "Введи ключ!";
+        statusDiv.className = "key-status error";
+        return;
+    }
+
+    statusDiv.innerText = "Проверяю...";
+    statusDiv.className = "key-status";
+
+    try {
+        // Запрос к нашему боту/серверу (если сервер запущен)
+        const res = await fetch(`http://127.0.0.1:8000/check_key?key=${key}`);
+        if (res.ok) {
+            const data = await res.json();
+            if (data.status === 'valid') {
+                statusDiv.innerText = "? Ключ валиден и активен!";
+                statusDiv.className = "key-status success";
+            } else if (data.status === 'unactivated') {
+                statusDiv.innerText = "? Ключ найден, но не активирован (запусти клиент).";
+                statusDiv.className = "key-status warn";
+            } else if (data.status === 'burned') {
+                statusDiv.innerText = "?? Ключ сгорел (попытка передачи).";
+                statusDiv.className = "key-status error";
+            } else {
+                statusDiv.innerText = "? Ключ не найден.";
+                statusDiv.className = "key-status error";
+            }
+        } else {
+            statusDiv.innerText = "?? Сервер проверки недоступен.";
+            statusDiv.className = "key-status error";
+        }
+    } catch (e) {
+        // Если сервер не запущен локально, показываем фейковый статус для теста
+        if (key.startsWith("STAS-")) {
+            statusDiv.innerText = "?? Сервер проверки выключен. Ключ похож на настоящий.";
+            statusDiv.className = "key-status warn";
+        } else {
+            statusDiv.innerText = "? Неверный формат ключа.";
+            statusDiv.className = "key-status error";
+        }
+    }
+});

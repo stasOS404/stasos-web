@@ -417,3 +417,35 @@ body.matrix-mode #bg-particles { opacity: 1; }
     cursor: pointer; z-index: 9999; transition: 0.3s; box-shadow: 0 0 20px rgba(198, 244, 50, 0.4);
 }
 #scrollTopBtn:hover { transform: translateY(-5px); box-shadow: 0 0 30px rgba(198, 244, 50, 0.8); }
+
+/* Œ¡ÕŒ¬À≈Õ»ﬂ (CHANGELOG) */
+.changelog { padding: 100px 50px; max-width: 800px; margin: 0 auto; }
+.changelog-container { position: relative; padding-left: 30px; border-left: 2px solid var(--border); }
+.changelog-item { position: relative; margin-bottom: 40px; }
+.changelog-item::before { content: ''; position: absolute; left: -37px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+.changelog-date { font-size: 14px; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
+.changelog-content h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+.changelog-content ul { list-style: disc; padding-left: 20px; color: var(--text-dim); line-height: 1.8; }
+
+/* √¿…ƒ€ */
+.guides { padding: 100px 50px; max-width: 1200px; margin: 0 auto; }
+.guides-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+.guide-card { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 40px; backdrop-filter: blur(20px); transition: 0.3s; }
+.guide-card:hover { border-color: rgba(198, 244, 50, 0.3); transform: translateY(-5px); }
+.guide-icon { font-size: 40px; margin-bottom: 20px; }
+.guide-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 15px; }
+.guide-card p { color: var(--text-dim); font-size: 15px; line-height: 1.8; }
+
+/* œ–Œ¬≈– ¿  Àﬁ◊¿ */
+.key-check { padding: 100px 50px; max-width: 600px; margin: 0 auto; text-align: center; }
+.key-check-container { background: var(--panel); border: 1px solid var(--border); border-radius: 24px; padding: 40px; backdrop-filter: blur(20px); }
+.key-check-desc { color: var(--text-dim); margin-bottom: 20px; font-size: 15px; }
+.input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+#key-input { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 12px; padding: 15px; color: var(--text); font-size: 16px; outline: none; font-family: monospace; text-transform: uppercase; }
+#key-input:focus { border-color: var(--accent); }
+#key-check-btn { background: var(--accent); color: var(--bg); border: none; padding: 15px 30px; border-radius: 12px; font-weight: 800; font-size: 16px; cursor: pointer; transition: 0.3s; }
+#key-check-btn:hover { box-shadow: 0 0 20px rgba(198, 244, 50, 0.5); }
+.key-status { font-size: 16px; font-weight: 800; min-height: 24px; }
+.key-status.success { color: var(--accent); }
+.key-status.error { color: #e5484d; }
+.key-status.warn { color: #e5c07b; }
