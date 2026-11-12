@@ -171,33 +171,47 @@ footer .logo { margin-bottom: 20px; color: var(--text); }
     .global-text .section-title { text-align: center !important; }
 }
 
-/* Исправленная анимация планеты */
+
+    .earth-image { width: 240px; height: 240px; background-size: 480px 240px; }
+}
+
+/* СалоTOVaya Tochki (Dot-Matrix) Zemlya */
 .earth-container {
     position: relative;
-    width: 400px; /* Увеличили контейнер */
+    width: 400px;
     height: 400px;
     display: flex;
     justify-content: center;
     align-items: center;
+    perspective: 1000px; /* Для эффекта объема */
 }
+
 .earth-glow {
     position: absolute;
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(198, 244, 50, 0.3) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(198, 244, 50, 0.2) 0%, transparent 60%);
     animation: pulse-glow 3s infinite alternate;
+    z-index: 1;
 }
+
 .earth-image {
-    width: 320px; /* Увеличили сам шар */
+    width: 320px;
     height: 320px;
     border-radius: 50%;
-    /* 100% рабочая ссылка на Землю */
-    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Earth_Western_Hemisphere_transparent_background.png/600px-Earth_Western_Hemisphere_transparent_background.png');
-    background-size: 640px 320px; /* Размер текстуры для прокрутки */
+    /* Используем точечную карту мира (белые точки на прозрачном фоне) */
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/World_map_-_low_resolution.svg/1200px-World_map_-_low_resolution.svg.png');
+    background-size: 640px 320px;
     background-repeat: repeat-x;
-    box-shadow: inset -30px -30px 60px rgba(0,0,0,0.9), 0 0 40px rgba(198, 244, 50, 0.5);
-    animation: spin-earth 30s linear infinite;
+    
+    /* Красим картинку в наш салатовый цвет и добавляем свечение */
+    filter: invert(85%) sepia(60%) saturate(500%) hue-rotate(30deg) brightness(120%) drop-shadow(0 0 15px rgba(198, 244, 50, 0.8));
+    
+    /* Внутренняя тень, чтобы сделать шар объемным */
+    box-shadow: inset -40px -40px 60px rgba(0,0,0,1), inset 10px 10px 40px rgba(198, 244, 50, 0.2);
+    
+    animation: spin-earth 40s linear infinite;
     z-index: 2;
 }
 
@@ -205,9 +219,10 @@ footer .logo { margin-bottom: 20px; color: var(--text); }
     from { background-position: 0 center; }
     to { background-position: 640px center; }
 }
+
 @keyframes pulse-glow {
-    0% { transform: scale(1); opacity: 0.6; }
-    100% { transform: scale(1.05); opacity: 1; }
+    0% { transform: scale(1); opacity: 0.4; }
+    100% { transform: scale(1.1); opacity: 0.8; }
 }
 
 @media (max-width: 900px) {
