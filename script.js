@@ -16,15 +16,14 @@ for (let i = 0; i < 60; i++) {
 
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // РњРµРЅСЏРµРј С†РІРµС‚ РЅР° РјР°С‚СЂРёС‡РЅС‹Р№, РµСЃР»Рё РІРєР»СЋС‡РµРЅР° РїР°СЃС…Р°Р»РєР°
     if (document.body.classList.contains('matrix-mode')) {
-        ctx.fillStyle = 'rgba(198, 244, 50, 0.8)'; // РЇСЂРєРѕ-СЃР°Р»Р°С‚РѕРІС‹Р№ РґР»СЏ РјР°С‚СЂРёС†С‹
+        ctx.fillStyle = 'rgba(198, 244, 50, 0.8)'; 
         particles.forEach(p => {
             p.x += (Math.random() - 0.5) * 5;
             p.y += (Math.random() - 0.5) * 5;
         });
     } else {
-        ctx.fillStyle = 'rgba(198, 244, 50, 0.2)'; // РћР±С‹С‡РЅС‹Р№ С„РѕРЅ
+        ctx.fillStyle = 'rgba(198, 244, 50, 0.2)'; 
         particles.forEach(p => {
             p.x += p.vx; p.y += p.vy;
             if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
@@ -69,7 +68,6 @@ document.addEventListener('keydown', (e) => {
         if (konamiIndex === konamiCode.length) {
             document.body.classList.toggle('matrix-mode');
             konamiIndex = 0;
-            alert("РњР°С‚СЂРёС†Р° Р°РєС‚РёРІРёСЂРѕРІР°РЅР°! РќР°РїРёС€Рё 'stas' РґР»СЏ СЃРµРєСЂРµС‚Р°.");
         }
     } else {
         konamiIndex = 0;
@@ -108,30 +106,29 @@ function showSecretScreen() {
 
     const screen = document.createElement('div');
     screen.id = 'secret-screen';
+    
+    // Р СѓСЃСЃРєРёР№ С‚РµРєСЃС‚ Рё СЃРјР°Р№Р»РёРє С‚РµРїРµСЂСЊ РІ РЅРѕСЂРјР°Р»СЊРЅРѕР№ РєРѕРґРёСЂРѕРІРєРµ
     screen.innerHTML = `
         <div class="secret-content">
             <h1 class="secret-logo"><span>stas</span>OS</h1>
-            <p class="secret-motto">Играй по своим правилам <span class="wink">;)</span></p>
+            <p class="secret-motto">РРіСЂР°Р№ РїРѕ СЃРІРѕРёРј РїСЂР°РІРёР»Р°Рј <span class="wink">;)</span></p>
         </div>
     `;
     document.body.appendChild(screen);
 
-    // Анимация появления
     setTimeout(() => {
         screen.classList.add('show');
     }, 100);
 
-    // --- АВТОЗАКРЫТИЕ ---
-    // Через 2.5 секунды экран плавно исчезает
+    // РђР’РўРћР—РђРљР Р«РўРР• С‡РµСЂРµР· 2.5 СЃРµРєСѓРЅРґС‹
     setTimeout(() => {
         screen.classList.remove('show');
-        setTimeout(() => screen.remove(), 800); // Ждем окончания анимации и удаляем
+        setTimeout(() => screen.remove(), 800);
     }, 2500);
 
-    // Клик для ручного закрытия (на всякий случай)
+    // РљР»РёРє РґР»СЏ СЂСѓС‡РЅРѕРіРѕ Р·Р°РєСЂС‹С‚РёСЏ
     screen.addEventListener('click', () => {
         screen.classList.remove('show');
         setTimeout(() => screen.remove(), 800);
     });
 }
-
