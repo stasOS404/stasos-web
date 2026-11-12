@@ -255,6 +255,10 @@ footer .logo { margin-bottom: 20px; color: var(--text); }
     100% { transform: scale(1.1); opacity: 0.8; }
 }
 
+
+    100% { transform: scale(1.1); opacity: 0.8; }
+}
+
 /* БЛОК С ГЕОГРАФИЕЙ */
 .global-container {
     display: flex;
@@ -288,6 +292,10 @@ footer .logo { margin-bottom: 20px; color: var(--text); }
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 50%;
+    /* Внутренняя тень для объема */
+    box-shadow: inset -20px -20px 50px rgba(0,0,0,1), inset 10px 10px 30px rgba(198, 244, 50, 0.2);
+    overflow: hidden; /* Обрезаем карту по краям шара */
 }
 
 .earth-glow {
@@ -297,28 +305,29 @@ footer .logo { margin-bottom: 20px; color: var(--text); }
     border-radius: 50%;
     background: radial-gradient(circle, rgba(198, 244, 50, 0.2) 0%, transparent 60%);
     animation: pulse-glow 3s infinite alternate;
-    z-index: 1;
+    z-index: 10;
+    pointer-events: none;
 }
 
 .earth-image {
-    width: 100%;
+    width: 200%; /* Карта в 2 раза шире контейнера, чтобы было что листать */
     height: 100%;
     background-image: url('planet.png');
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: 50%;
+    background-position: left center;
+    background-repeat: repeat-x; /* Повторяем карту, чтобы не было пустоты */
     
     /* Красим картинку в наш цвет */
-    filter: invert(85%) sepia(60%) saturate(500%) hue-rotate(30deg) brightness(120%) drop-shadow(0 0 20px rgba(198, 244, 50, 0.6));
+    filter: invert(85%) sepia(60%) saturate(500%) hue-rotate(30deg) brightness(120%) drop-shadow(0 0 10px rgba(198, 244, 50, 0.5));
     
-    animation: spin-earth 20s linear infinite;
-    z-index: 2;
+    /* Двигаем карту вбок */
+    animation: scroll-earth 15s linear infinite;
 }
 
-@keyframes spin-earth {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+/* Анимация движения слева направо */
+@keyframes scroll-earth {
+    0% { background-position: 0 center; }
+    100% { background-position: -600px center; }
 }
 
 @keyframes pulse-glow {
