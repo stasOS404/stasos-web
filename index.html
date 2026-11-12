@@ -15,6 +15,7 @@
         <div class="nav-links">
             <a href="#about">О проекте</a>
             <a href="#features">Функции</a>
+            <a href="#changelog">Обновления</a>
             <a href="#roadmap">Планы</a>
             <a href="roblox.html" style="color: #ff4757; font-weight: 800;">🔥 Roblox (Free)</a>
             <a href="#pricing">Цены</a>
@@ -147,6 +148,71 @@
                 <p class="review-text">"Купил на 90 дней, не пожалел. Античит не палит, поддержка отвечает быстро. Дизайн реально радует глаз."</p>
                 <div class="review-author">— Максим, 17 лет</div>
             </div>
+        </div>
+    </section>
+
+    <!-- ОБНОВЛЕНИЯ (CHANGELOG) -->
+    <section id="changelog" class="changelog">
+        <h2 class="section-title">Обновления клиента</h2>
+        <div class="changelog-container">
+            <div class="changelog-item">
+                <div class="changelog-date">12.11.2026 | v2.1.0</div>
+                <div class="changelog-content">
+                    <h3>Глобальное обновление GUI</h3>
+                    <ul>
+                        <li>Добавлен встроенный ClickGUI (Right Shift).</li>
+                        <li>Новый HUD с иконками брони и нажатиями клавиш.</li>
+                        <li>Система тем (4 цвета на выбор).</li>
+                        <li>Маскировка под Cloth Config API.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="changelog-item">
+                <div class="changelog-date">01.11.2026 | v2.0.0</div>
+                <div class="changelog-content">
+                    <h3>Переход на нативное ядро</h3>
+                    <ul>
+                        <li>Клиент полностью переписан на Rust (Tauri).</li>
+                        <li>Скорость запуска снижена до 0.1 секунды.</li>
+                        <li>Вес клиента уменьшен до 4 МБ.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ГАЙДЫ -->
+    <section class="guides">
+        <h2 class="section-title">Гайды по установке</h2>
+        <div class="guides-grid">
+            <div class="guide-card">
+                <div class="guide-icon">📥</div>
+                <h3>Как установить клиент для Minecraft</h3>
+                <p>1. Купи ключ в боте.<br>2. Скачай PDF и Лоадер.<br>3. Запусти Лоадер и выбери PDF.<br>4. Введи ключ в клиенте.<br>5. Нажми Right Shift в игре.</p>
+            </div>
+            <div class="guide-card">
+                <div class="guide-icon">🔑</div>
+                <h3>Как активировать ключ</h3>
+                <p>1. Открой клиент stasOS.<br>2. Введи свой ключ и Telegram ID.<br>3. Нажми «Активировать».<br>4. Готово, приятной игры!</p>
+            </div>
+            <div class="guide-card">
+                <div class="guide-icon">🎮</div>
+                <h3>Как ставить скрипты для Roblox</h3>
+                <p>1. Скачай инжектор Delta.<br>2. Запусти Roblox.<br>3. Вставь код с нашего сайта.<br>4. Нажми Execute.<br>5. Наслаждайся!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПРОВЕРКА КЛЮЧА -->
+    <section class="key-check">
+        <h2 class="section-title">Проверка ключа</h2>
+        <div class="key-check-container">
+            <p class="key-check-desc">Введи свой ключ, чтобы узнать его статус.</p>
+            <div class="input-group">
+                <input type="text" id="key-input" placeholder="STAS-XXXX-XXXX-XXXX" />
+                <button id="key-check-btn">ПРОВЕРИТЬ</button>
+            </div>
+            <div id="key-status" class="key-status"></div>
         </div>
     </section>
 
