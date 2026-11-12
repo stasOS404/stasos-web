@@ -175,49 +175,66 @@ footer .logo { margin-bottom: 20px; color: var(--text); }
     .earth-image { width: 240px; height: 240px; background-size: 480px 240px; }
 }
 
-/* СалоTOVaya Tochki (Dot-Matrix) Zemlya */
+
+    .earth-image { width: 240px; height: 240px; background-size: 480px 240px; }
+}
+
+/* КИБЕРПАНК СФЕРА (100% CSS, БЕЗ КАРТИНОК) */
 .earth-container {
     position: relative;
-    width: 400px;
-    height: 400px;
+    width: 350px;
+    height: 350px;
     display: flex;
     justify-content: center;
     align-items: center;
-    perspective: 1000px; /* Для эффекта объема */
 }
 
+/* Свечение вокруг */
 .earth-glow {
     position: absolute;
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(198, 244, 50, 0.2) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(198, 244, 50, 0.15) 0%, transparent 60%);
     animation: pulse-glow 3s infinite alternate;
     z-index: 1;
 }
 
+/* Сама сфера (сетка из точек) */
 .earth-image {
     width: 320px;
     height: 320px;
     border-radius: 50%;
-    /* Используем точечную карту мира (белые точки на прозрачном фоне) */
-    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/World_map_-_low_resolution.svg/1200px-World_map_-_low_resolution.svg.png');
-    background-size: 640px 320px;
-    background-repeat: repeat-x;
     
-    /* Красим картинку в наш салатовый цвет и добавляем свечение */
-    filter: invert(85%) sepia(60%) saturate(500%) hue-rotate(30deg) brightness(120%) drop-shadow(0 0 15px rgba(198, 244, 50, 0.8));
+    /* Рисуем сетку из точек и градиент для объема */
+    background: 
+        radial-gradient(circle at 30% 30%, rgba(198, 244, 50, 0.2), transparent 50%),
+        repeating-radial-gradient(
+            circle at 50% 50%,
+            transparent 0,
+            transparent 12px,
+            rgba(198, 244, 50, 0.8) 13px,
+            transparent 14px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent 0,
+            transparent 12px,
+            rgba(198, 244, 50, 0.8) 13px,
+            transparent 14px
+        );
+        
+    /* Внутренняя тень для объема */
+    box-shadow: inset -40px -40px 60px rgba(0,0,0,1), inset 10px 10px 40px rgba(198, 244, 50, 0.1), 0 0 30px rgba(198, 244, 50, 0.3);
     
-    /* Внутренняя тень, чтобы сделать шар объемным */
-    box-shadow: inset -40px -40px 60px rgba(0,0,0,1), inset 10px 10px 40px rgba(198, 244, 50, 0.2);
-    
-    animation: spin-earth 40s linear infinite;
+    /* Анимация вращения (иллюзия) */
+    animation: rotate-sphere 10s linear infinite;
     z-index: 2;
 }
 
-@keyframes spin-earth {
-    from { background-position: 0 center; }
-    to { background-position: 640px center; }
+@keyframes rotate-sphere {
+    0% { background-position: 0 0, 0 0, 0 0; }
+    100% { background-position: 0 0, 0 0, 100px 0; }
 }
 
 @keyframes pulse-glow {
@@ -227,5 +244,5 @@ footer .logo { margin-bottom: 20px; color: var(--text); }
 
 @media (max-width: 900px) {
     .earth-container { width: 300px; height: 300px; }
-    .earth-image { width: 240px; height: 240px; background-size: 480px 240px; }
+    .earth-image { width: 260px; height: 260px; }
 }
