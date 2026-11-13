@@ -57,8 +57,6 @@ document.querySelectorAll('.feature-card, .price-card, .roadmap-item, .faq-item'
 });
 
 // --- РџРђРЎРҐРђР›РљР ---
-
-// 1. Konami Code (РњР°С‚СЂРёС†Р°)
 let konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 let konamiIndex = 0;
 
@@ -69,15 +67,11 @@ document.addEventListener('keydown', (e) => {
             document.body.classList.toggle('matrix-mode');
             konamiIndex = 0;
         }
-    } else {
-        konamiIndex = 0;
-    }
+    } else { konamiIndex = 0; }
 });
 
-// 2. РџР°СЃС…Р°Р»РєР° РІ РєРѕРЅСЃРѕР»Рё
 console.log("%cРўС‹ С‡Рµ С‚СѓС‚ Р·Р°Р±С‹Р»? РРґРё РїРѕРєСѓРїР°Р№ РєР»СЋС‡ рџЋ", "color: #c6f432; font-size: 20px; font-weight: bold; background: #0b0b0e; padding: 10px;");
 
-// 3. РљР»РёРє РїРѕ Р»РѕРіРѕС‚РёРїСѓ 10 СЂР°Р· (Рё РІРІРѕРґ СЃР»РѕРІР° 'stas')
 let logoClicks = 0;
 let typedWord = "";
 const logo = document.querySelector('.logo');
@@ -85,29 +79,20 @@ const logo = document.querySelector('.logo');
 if (logo) {
     logo.addEventListener('click', () => {
         logoClicks++;
-        if (logoClicks >= 10) {
-            showSecretScreen();
-            logoClicks = 0;
-        }
+        if (logoClicks >= 10) { showSecretScreen(); logoClicks = 0; }
     });
 }
 
 document.addEventListener('keypress', (e) => {
     typedWord += e.key.toLowerCase();
     if (typedWord.length > 4) typedWord = typedWord.slice(-4);
-    if (typedWord === 'stas') {
-        showSecretScreen();
-    }
+    if (typedWord === 'stas') { showSecretScreen(); }
 });
 
-// 4. РЎРµРєСЂРµС‚РЅС‹Р№ СЌРєСЂР°РЅ
 function showSecretScreen() {
     if (document.getElementById('secret-screen')) return;
-
     const screen = document.createElement('div');
     screen.id = 'secret-screen';
-    
-    // Р СѓСЃСЃРєРёР№ С‚РµРєСЃС‚ Рё СЃРјР°Р№Р»РёРє С‚РµРїРµСЂСЊ РІ РЅРѕСЂРјР°Р»СЊРЅРѕР№ РєРѕРґРёСЂРѕРІРєРµ
     screen.innerHTML = `
         <div class="secret-content">
             <h1 class="secret-logo"><span>stas</span>OS</h1>
@@ -115,81 +100,60 @@ function showSecretScreen() {
         </div>
     `;
     document.body.appendChild(screen);
-
-    setTimeout(() => {
-        screen.classList.add('show');
-    }, 100);
-
-    // РђР’РўРћР—РђРљР Р«РўРР• С‡РµСЂРµР· 2.5 СЃРµРєСѓРЅРґС‹
-    setTimeout(() => {
-        screen.classList.remove('show');
-        setTimeout(() => screen.remove(), 800);
-    }, 2500);
-
-    // РљР»РёРє РґР»СЏ СЂСѓС‡РЅРѕРіРѕ Р·Р°РєСЂС‹С‚РёСЏ
-    screen.addEventListener('click', () => {
-        screen.classList.remove('show');
-        setTimeout(() => screen.remove(), 800);
-    });
+    setTimeout(() => { screen.classList.add('show'); }, 100);
+    setTimeout(() => { screen.classList.remove('show'); setTimeout(() => screen.remove(), 800); }, 2500);
+    screen.addEventListener('click', () => { screen.classList.remove('show'); setTimeout(() => screen.remove(), 800); });
 }
-// Кнопка наверх
+
+// РљРЅРѕРїРєР° РЅР°РІРµСЂС…
 const scrollTopBtn = document.getElementById('scrollTopBtn');
-
 window.addEventListener('scroll', () => {
-    if (window.scrollY > 500) {
-        scrollTopBtn.style.display = 'block';
-    } else {
-        scrollTopBtn.style.display = 'none';
-    }
+    if (window.scrollY > 500) scrollTopBtn.style.display = 'block';
+    else scrollTopBtn.style.display = 'none';
 });
+scrollTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
-scrollTopBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-// ПРОВЕРКА КЛЮЧА
+// --- РџР РћР’Р•Р РљРђ РљР›Р®Р§Рђ ---
 document.getElementById('key-check-btn').addEventListener('click', async () => {
     const key = document.getElementById('key-input').value.trim().toUpperCase();
     const statusDiv = document.getElementById('key-status');
     
     if (!key) {
-        statusDiv.innerText = "Введи ключ!";
+        statusDiv.innerText = "Р’РІРµРґРё РєР»СЋС‡!";
         statusDiv.className = "key-status error";
         return;
     }
 
-    statusDiv.innerText = "Проверяю...";
+    statusDiv.innerText = "РџСЂРѕРІРµСЂСЏСЋ...";
     statusDiv.className = "key-status";
 
     try {
-        // Запрос к нашему боту/серверу (если сервер запущен)
         const res = await fetch(`http://127.0.0.1:8000/check_key?key=${key}`);
         if (res.ok) {
             const data = await res.json();
             if (data.status === 'valid') {
-                statusDiv.innerText = "? Ключ валиден и активен!";
+                statusDiv.innerText = "вњ… РљР»СЋС‡ РІР°Р»РёРґРµРЅ Рё Р°РєС‚РёРІРµРЅ!";
                 statusDiv.className = "key-status success";
             } else if (data.status === 'unactivated') {
-                statusDiv.innerText = "? Ключ найден, но не активирован (запусти клиент).";
+                statusDiv.innerText = "вЏі РљР»СЋС‡ РЅР°Р№РґРµРЅ, РЅРѕ РЅРµ Р°РєС‚РёРІРёСЂРѕРІР°РЅ (Р·Р°РїСѓСЃС‚Рё РєР»РёРµРЅС‚).";
                 statusDiv.className = "key-status warn";
             } else if (data.status === 'burned') {
-                statusDiv.innerText = "?? Ключ сгорел (попытка передачи).";
+                statusDiv.innerText = "рџ”Ґ РљР»СЋС‡ СЃРіРѕСЂРµР» (РїРѕРїС‹С‚РєР° РїРµСЂРµРґР°С‡Рё).";
                 statusDiv.className = "key-status error";
             } else {
-                statusDiv.innerText = "? Ключ не найден.";
+                statusDiv.innerText = "вќЊ РљР»СЋС‡ РЅРµ РЅР°Р№РґРµРЅ.";
                 statusDiv.className = "key-status error";
             }
         } else {
-            statusDiv.innerText = "?? Сервер проверки недоступен.";
+            statusDiv.innerText = "вљ пёЏ РЎРµСЂРІРµСЂ РїСЂРѕРІРµСЂРєРё РЅРµРґРѕСЃС‚СѓРїРµРЅ.";
             statusDiv.className = "key-status error";
         }
     } catch (e) {
-        // Если сервер не запущен локально, показываем фейковый статус для теста
         if (key.startsWith("STAS-")) {
-            statusDiv.innerText = "?? Сервер проверки выключен. Ключ похож на настоящий.";
+            statusDiv.innerText = "вљ пёЏ РЎРµСЂРІРµСЂ РїСЂРѕРІРµСЂРєРё РІС‹РєР»СЋС‡РµРЅ. РљР»СЋС‡ РїРѕС…РѕР¶ РЅР° РЅР°СЃС‚РѕСЏС‰РёР№.";
             statusDiv.className = "key-status warn";
         } else {
-            statusDiv.innerText = "? Неверный формат ключа.";
+            statusDiv.innerText = "вќЊ РќРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚ РєР»СЋС‡Р°.";
             statusDiv.className = "key-status error";
         }
     }
