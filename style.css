@@ -496,3 +496,103 @@ footer { padding: 50px; border-top: 1px solid var(--border); color: var(--text-d
     .support-widget { bottom: 20px; left: 20px; padding: 10px 15px; }
     .support-text { display: none; }
 }
+
+/* ПРОВЕРКА КЛЮЧА - АНИМАЦИИ */
+.key-check-container {
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.key-check-container.success {
+    border-color: var(--accent);
+    box-shadow: 0 0 40px rgba(198, 244, 50, 0.2);
+}
+
+/* Волна при успешной проверке */
+@keyframes wave-success {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(198, 244, 50, 0.7); }
+    50% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(198, 244, 50, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(198, 244, 50, 0); }
+}
+
+#key-input.success {
+    border-color: var(--accent);
+    color: var(--accent);
+    animation: wave-success 1s ease-out;
+    font-weight: 800;
+}
+
+/* Тряска при ошибке */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+#key-input.error {
+    border-color: #e5484d;
+    color: #e5484d;
+    animation: shake 0.5s;
+}
+
+/* Спиннер загрузки */
+#key-check-btn.loading {
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: transparent;
+    position: relative;
+}
+#key-check-btn.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 20px; height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--accent);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin-load 0.8s linear infinite;
+}
+@keyframes spin-load {
+    to { transform: rotate(360deg); }
+}
+
+/* ПРОВЕРКА КЛЮЧА - АНИМАЦИИ */
+.key-check-container { transition: all 0.4s ease; position: relative; }
+.key-check-container.success { border-color: var(--accent); box-shadow: 0 0 40px rgba(198, 244, 50, 0.2); }
+
+@keyframes wave-success {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(198, 244, 50, 0.7); }
+    50% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(198, 244, 50, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(198, 244, 50, 0); }
+}
+#key-input.success {
+    border-color: var(--accent);
+    color: var(--accent);
+    animation: wave-success 1s ease-out;
+    font-weight: 800;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+#key-input.error {
+    border-color: #e5484d;
+    color: #e5484d;
+    animation: shake 0.5s;
+}
+
+#key-check-btn.loading {
+    background: transparent; border: 2px solid var(--accent);
+    color: transparent; position: relative;
+}
+#key-check-btn.loading::after {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    width: 20px; height: 20px; margin: -10px 0 0 -10px;
+    border: 2px solid var(--accent); border-top-color: transparent;
+    border-radius: 50%; animation: spin-load 0.8s linear infinite;
+}
+@keyframes spin-load { to { transform: rotate(360deg); } }
