@@ -1,193 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Бесплатные скрипты | stasOS</title>
-    <link rel="stylesheet" href="style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-    <style>
-        /* Дополнительные стили */
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            max-width: 1000px;
-            margin: 0 auto 60px;
-            padding: 0 20px;
-        }
-        .info-card {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 25px;
-            backdrop-filter: blur(20px);
-        }
-        .info-card h3 {
-            color: var(--accent);
-            font-size: 18px;
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
-        .info-card p {
-            color: var(--text-dim);
-            font-size: 14px;
-            line-height: 1.6;
-        }
-        .script-container {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 20px 100px;
-        }
-        .script-card {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 30px;
-            backdrop-filter: blur(20px);
-            transition: 0.4s;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .script-card:hover {
-            border-color: rgba(198, 244, 50, 0.3);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-            transform: translateY(-5px);
-        }
-        .script-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .script-title {
-            font-size: 24px;
-            font-weight: 900;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .script-title span { color: var(--accent); }
-        .badge-free {
-            background: rgba(198, 244, 50, 0.1);
-            color: var(--accent);
-            border: 1px solid var(--accent);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 800;
-            letter-spacing: 1px;
-        }
-        .script-desc {
-            color: var(--text-dim);
-            font-size: 15px;
-            line-height: 1.6;
-        }
-        .script-features {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .feature-tag {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text);
-        }
-        .copy-btn {
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            padding: 16px 30px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 900;
-            cursor: pointer;
-            transition: 0.3s;
-            width: 100%;
-            letter-spacing: 1px;
-        }
-        .copy-btn:hover {
-            box-shadow: 0 0 30px rgba(198, 244, 50, 0.5);
-            transform: scale(1.02);
-        }
-        .copy-btn:active { transform: scale(0.98); }
-        
-        .toast {
-            position: fixed; bottom: 30px; left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--accent); color: var(--bg);
-            padding: 15px 30px; border-radius: 12px;
-            font-weight: 800; font-size: 16px;
-            box-shadow: 0 10px 30px rgba(198, 244, 50, 0.4);
-            opacity: 0; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 9999; display: flex; align-items: center; gap: 10px;
-        }
-        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07070a">
+  <meta name="description" content="Библиотека stasOS Roblox: бесплатные скрипты и обновления.">
+  <title>Roblox Free — stasOS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
-<body>
-    <canvas id="bg-particles"></canvas>
-
-    <nav class="navbar">
-        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;"><span>stas</span>OS</div>
-        <div class="nav-links">
-            <a href="index.html">Главная</a>
-            <a href="index.html#pricing">Купить для MC</a>
-            <a href="https://t.me/stasOS_Cheat_bot" class="btn-nav">Telegram</a>
-        </div>
-    </nav>
-
-    <header class="hero" style="min-height: auto; padding-top: 120px; padding-bottom: 40px;">
-        <h1 class="hero-title">Скрипты <span class="accent">для Roblox</span></h1>
-        <p class="hero-subtitle">Абсолютно бесплатная база скриптов. Мы делаем их для души и обновляем каждую неделю.</p>
+<body class="rbx-page">
+  <canvas id="bg-particles" aria-hidden="true"></canvas><div class="ambient ambient-one" aria-hidden="true"></div><div class="ambient ambient-two" aria-hidden="true"></div><div class="noise" aria-hidden="true"></div>
+  <nav class="navbar" aria-label="Основная навигация">
+    <a class="logo" href="index.html" aria-label="stasOS — на главную"><span>stas</span>OS<i></i></a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav-links"><span></span><span></span></button>
+    <div class="nav-links" id="nav-links"><a href="index.html#features">Возможности</a><a href="index.html#pricing">Тарифы</a><a href="roblox.html" class="nav-roblox"><i></i> Roblox Free</a><a href="https://t.me/stasOS_Cheat_bot" class="nav-cta">Открыть Telegram <span>↗</span></a></div>
+  </nav>
+  <main>
+    <header class="rbx-hero">
+      <div class="rbx-kicker"><i></i> STASOS // ROBLOX LIBRARY</div>
+      <h1 class="rbx-title reveal">Играем<br><span>по-своему.</span></h1>
+      <p class="rbx-lede reveal">Библиотека Roblox-проектов stasOS. Выбери игру, проверь статус и забери актуальный материал в один клик.</p>
+      <div class="rbx-meta reveal"><span>01 // FREE ACCESS</span><span>ОБНОВЛЯЕМАЯ БИБЛИОТЕКА</span><span>ЛАКОНИЧНО. БЕЗ ЛИШНЕГО.</span></div>
     </header>
-
-    <!-- ИНФОРМАЦИОННЫЕ БЛОКИ -->
-    <div class="info-grid">
-        <div class="info-card">
-            <h3>📖 Что это такое?</h3>
-            <p>Это Lua-скрипты, которые внедряются в игру. Они дают преимущество: подсветка игроков через стены, авто-подбор оружия, полёт и многое другое.</p>
-        </div>
-        <div class="info-card">
-            <h3>🚀 Как использовать?</h3>
-            <p>1. Скачай любой инжектор (Delta, Wave, Xeno).<br>2. Запусти Roblox.<br>3. Нажми «Inject».<br>4. Скопируй код с сайта и вставь в консоль.</p>
-        </div>
-        <div class="info-card">
-            <h3>🔥 База пополняется!</h3>
-            <p>Мы регулярно добавляем новые скрипты для популярных игр (Arsenal, Blox Fruits, MM2). Добавляй сайт в закладки, чтобы не пропустить.</p>
-        </div>
-    </div>
-
-    <div class="script-container">
-        
-        <div class="script-card">
-            <div class="script-header">
-                <div class="script-title">🔪 Murder Mystery 2 <span>ULTRA</span></div>
-                <div class="badge-free">FREE</div>
-            </div>
-            <div class="script-desc">
-                Мощный скрипт для MM2. Показывает роли (Маньяк, Шериф, Мирный) через стены, подсвечивает оружие и автоматически к нему телепортирует.
-            </div>
-            <div class="script-features">
-                <div class="feature-tag">Role ESP</div>
-                <div class="feature-tag">Item ESP</div>
-                <div class="feature-tag">Auto Pickup</div>
-                <div class="feature-tag">In-Game Menu</div>
-            </div>
-            <button class="copy-btn" onclick="copyCode('mm2-code')">📋 СКОПИРОВАТЬ КОД</button>
-            <div id="mm2-code" style="display:none;">
+    <section class="rbx-info section-wrap" aria-label="О библиотеке">
+      <article class="rbx-info-card reveal"><span>01 / ДОСТУП</span><h2>Бесплатная библиотека</h2><p>Материалы доступны без покупки подписки на stasOS.</p></article>
+      <article class="rbx-info-card reveal"><span>02 / АКТУАЛЬНОСТЬ</span><h2>Статус всегда на виду</h2><p>Перед использованием проверь описание и доступность выбранного проекта.</p></article>
+      <article class="rbx-info-card reveal"><span>03 / КОПИРОВАНИЕ</span><h2>Один клик</h2><p>Нажми кнопку в карточке, чтобы скопировать текст в буфер обмена.</p></article>
+    </section>
+    <section class="rbx-library section-wrap" id="library">
+      <div class="rbx-library-head"><div><div class="section-index"><span>01</span> / AVAILABLE NOW</div><h2>Библиотека</h2></div><p>CATALOG // 2026</p></div>
+      <article class="script-card reveal">
+        <div class="script-card-top"><div><div class="script-id">ROBLOX / MM2 / RELEASE 01</div><h3 class="script-title">Murder Mystery 2 <span>///</span></h3></div><span class="badge-free">FREE</span></div>
+        <p class="script-desc">Материал для Murder Mystery 2. Перед запуском ознакомься с правилами игры и используй на свой риск.</p>
+        <div class="script-features"><span class="feature-tag">MURDER MYSTERY 2</span><span class="feature-tag">ONE-CLICK COPY</span><span class="feature-tag">COMMUNITY RELEASE</span></div>
+        <div class="script-actions"><p>Перед запуском проверь совместимость и актуальность версии.</p><button class="copy-btn" onclick="copyCode('mm2-code')">СКОПИРОВАТЬ МАТЕРИАЛ <span aria-hidden="true">↗</span></button></div>
+        <div id="mm2-code" style="display:none;">
 -- Вставь этот код в инжектор
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -360,39 +211,12 @@ RunService.RenderStepped:Connect(function()
     autoPickup()
 end)
             </div>
-        </div>
-
-        <div class="script-card" style="opacity: 0.5;">
-            <div class="script-header">
-                <div class="script-title">⚔️ Arsenal <span>COMING SOON</span></div>
-                <div class="badge-free">FREE</div>
-            </div>
-            <div class="script-desc">
-                Скрипт для Arsenal (Aimbot, ESP, Fly). Мы работаем над ним прямо сейчас.
-            </div>
-            <button class="copy-btn" disabled style="background: #26262c; color: #555; cursor: not-allowed;">СКОРО</button>
-        </div>
-
-    </div>
-
-    <div id="toast" class="toast">
-        <span>✅</span> Скрипт скопирован! Вставь его в инжектор.
-    </div>
-
-    <footer>
-        <div class="logo"><span>stas</span>OS</div>
-        <p>© 2026 stasOS. Все права защищены.</p>
-    </footer>
-
-    <script src="script.js"></script>
-    <script>
-        function copyCode(id) {
-            const code = document.getElementById(id).innerText;
-            navigator.clipboard.writeText(code);
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 3000);
-        }
-    </script>
+      </article>
+      <article class="script-card soon reveal"><div class="script-card-top"><div><div class="script-id">ROBLOX / NEXT DROP</div><h3 class="script-title">Следующий релиз</h3></div><span class="badge-free">SOON</span></div><p class="script-desc">Новая карточка появится здесь после подготовки и публикации обновления.</p></article>
+      <div class="rbx-bottom-note"><span><b>STASOS LIBRARY</b> / Обновления и новости</span><a href="https://t.me/stasOS_Cheat_bot">Перейти в Telegram ↗</a></div>
+    </section>
+  </main>
+  <footer class="site-footer rbx-footer"><a class="logo" href="index.html"><span>stas</span>OS<i></i></a><span>© <span data-year>2026</span> STASOS</span><div class="footer-links"><a href="index.html">Главная</a><a href="https://t.me/stasOS_Cheat_bot">Telegram ↗</a></div></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

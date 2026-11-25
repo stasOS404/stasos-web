@@ -1,142 +1,86 @@
-// Живой фон с частицами
 const canvas = document.getElementById('bg-particles');
-const ctx = canvas.getContext('2d');
-let particles = [];
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-window.addEventListener('resize', resize); resize();
-
-for (let i = 0; i < 60; i++) {
-    particles.push({
-        x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
-        r: Math.random() * 2 + 1
-    });
-}
-
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (document.body.classList.contains('matrix-mode')) {
-        ctx.fillStyle = 'rgba(198, 244, 50, 0.8)'; 
-        particles.forEach(p => {
-            p.x += (Math.random() - 0.5) * 5; p.y += (Math.random() - 0.5) * 5;
-        });
-    } else {
-        ctx.fillStyle = 'rgba(198, 244, 50, 0.2)'; 
-        particles.forEach(p => {
-            p.x += p.vx; p.y += p.vy;
-            if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-            if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-        });
+if (canvas) {
+  const ctx = canvas.getContext('2d');
+  let width = 0, height = 0, particles = [], frame = 0;
+  function resizeCanvas() {
+    const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+    width = window.innerWidth; height = window.innerHeight;
+    canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    const count = Math.max(20, Math.min(54, Math.floor(width * height / 24000)));
+    particles = Array.from({ length: count }, () => ({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - .5) * .14, vy: (Math.random() - .5) * .14, r: Math.random() * 1.2 + .35, a: Math.random() * .32 + .1 }));
+  }
+  function drawParticles() {
+    ctx.clearRect(0, 0, width, height);
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      if (!reduceMotion) { p.x += p.vx; p.y += p.vy; if (p.x < -4) p.x = width + 4; if (p.x > width + 4) p.x = -4; if (p.y < -4) p.y = height + 4; if (p.y > height + 4) p.y = -4; }
+      ctx.beginPath(); ctx.fillStyle = `rgba(198,244,50,${p.a})`; ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+      for (let j = i + 1; j < particles.length; j++) { const q = particles[j], dx = p.x - q.x, dy = p.y - q.y, d = Math.hypot(dx, dy); if (d < 100) { ctx.beginPath(); ctx.strokeStyle = `rgba(198,244,50,${(1 - d / 100) * .04})`; ctx.lineWidth = .6; ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke(); } }
     }
-    particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); });
-    requestAnimationFrame(animate);
-}
-animate();
-
-// Появление при скролле
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-            observer.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('.feature-card, .price-card, .roadmap-item, .faq-item').forEach(el => {
-    el.style.opacity = '0'; el.style.transform = 'translateY(30px)';
-    el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-    observer.observe(el);
-});
-
-// Пасхалки
-let konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-let konamiIndex = 0;
-document.addEventListener('keydown', (e) => {
-    if (e.key === konamiCode[konamiIndex] || e.key.toLowerCase() === konamiCode[konamiIndex]) {
-        konamiIndex++;
-        if (konamiIndex === konamiCode.length) { document.body.classList.toggle('matrix-mode'); konamiIndex = 0; }
-    } else { konamiIndex = 0; }
-});
-console.log("%cТы че тут забыл? Иди покупай ключ 😎", "color: #c6f432; font-size: 20px; font-weight: bold; background: #0b0b0e; padding: 10px;");
-
-let logoClicks = 0; let typedWord = "";
-const logo = document.querySelector('.logo');
-if (logo) { logo.addEventListener('click', () => { logoClicks++; if (logoClicks >= 10) { showSecretScreen(); logoClicks = 0; } }); }
-document.addEventListener('keypress', (e) => {
-    typedWord += e.key.toLowerCase(); if (typedWord.length > 4) typedWord = typedWord.slice(-4);
-    if (typedWord === 'stas') { showSecretScreen(); }
-});
-function showSecretScreen() {
-    if (document.getElementById('secret-screen')) return;
-    const screen = document.createElement('div'); screen.id = 'secret-screen';
-    screen.innerHTML = `<div class="secret-content"><h1 class="secret-logo"><span>stas</span>OS</h1><p class="secret-motto">Играй по своим правилам <span class="wink">;)</span></p></div>`;
-    document.body.appendChild(screen);
-    setTimeout(() => { screen.classList.add('show'); }, 100);
-    setTimeout(() => { screen.classList.remove('show'); setTimeout(() => screen.remove(), 800); }, 2500);
-    screen.addEventListener('click', () => { screen.classList.remove('show'); setTimeout(() => screen.remove(), 800); });
+    if (!reduceMotion && !document.hidden) frame = requestAnimationFrame(drawParticles);
+  }
+  resizeCanvas(); drawParticles();
+  window.addEventListener('resize', resizeCanvas, { passive: true });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) cancelAnimationFrame(frame); else drawParticles(); });
 }
 
-// Кнопка наверх
-const scrollTopBtn = document.getElementById('scrollTopBtn');
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 500) scrollTopBtn.style.display = 'block'; else scrollTopBtn.style.display = 'none';
-});
-scrollTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+const reveals = document.querySelectorAll('.reveal');
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver((entries, obs) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); obs.unobserve(entry.target); } }), { threshold: .12, rootMargin: '0px 0px -28px 0px' });
+  reveals.forEach((item) => observer.observe(item));
+} else reveals.forEach((item) => item.classList.add('is-visible'));
 
-// --- ПРОВЕРКА КЛЮЧА (АНИМАЦИЯ) ---
-document.getElementById('key-check-btn').addEventListener('click', async () => {
-    const keyInput = document.getElementById('key-input');
+const menuButton = document.getElementById('menu-toggle');
+const nav = document.getElementById('nav-links');
+if (menuButton && nav) {
+  const closeMenu = () => { menuButton.setAttribute('aria-expanded', 'false'); menuButton.setAttribute('aria-label', 'Открыть меню'); nav.classList.remove('open'); };
+  menuButton.addEventListener('click', () => { const open = menuButton.getAttribute('aria-expanded') === 'true'; menuButton.setAttribute('aria-expanded', String(!open)); menuButton.setAttribute('aria-label', open ? 'Открыть меню' : 'Закрыть меню'); nav.classList.toggle('open', !open); });
+  nav.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+  window.addEventListener('resize', () => { if (window.innerWidth > 800) closeMenu(); }, { passive: true });
+}
+
+const year = document.querySelector('[data-year]');
+if (year) year.textContent = new Date().getFullYear();
+
+const keyInput = document.getElementById('key-input');
+const keyButton = document.getElementById('key-check-btn');
+const keyStatus = document.getElementById('key-status');
+function setStatus(message, state = '') { if (!keyStatus) return; keyStatus.textContent = message; keyStatus.className = `key-status${state ? ` ${state}` : ''}`; }
+if (keyInput && keyButton && keyStatus) {
+  keyInput.addEventListener('input', () => { keyInput.value = keyInput.value.toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 19); keyInput.classList.remove('success', 'error'); setStatus(''); });
+  keyButton.addEventListener('click', async () => {
     const key = keyInput.value.trim().toUpperCase();
-    const statusDiv = document.getElementById('key-status');
-    const btn = document.getElementById('key-check-btn');
-    const container = document.querySelector('.key-check-container');
-    
-    if (!key) {
-        statusDiv.innerText = "Введи ключ!";
-        statusDiv.className = "key-status error";
-        keyInput.classList.add('error');
-        setTimeout(() => keyInput.classList.remove('error'), 500);
-        return;
-    }
-
-    btn.classList.add('loading');
-    statusDiv.innerText = "Связываюсь с сервером...";
-    statusDiv.className = "key-status";
-    keyInput.classList.remove('success', 'error');
-    container.classList.remove('success');
-
+    if (!key) { keyInput.classList.add('error'); setStatus('Введи ключ, чтобы проверить его статус.', 'error'); keyInput.focus(); return; }
+    keyButton.classList.add('loading'); keyButton.disabled = true; keyInput.classList.remove('success', 'error'); setStatus('Проверяю ключ…');
     try {
-        const res = await fetch(`http://127.0.0.1:8000/check_key?key=${key}`);
-        if (res.ok) {
-            const data = await res.json();
-            btn.classList.remove('loading');
-            if (data.status === 'valid') {
-                statusDiv.innerText = "✅ Ключ валиден и активен!";
-                statusDiv.className = "key-status success";
-                keyInput.classList.add('success');
-                container.classList.add('success');
-            } else if (data.status === 'unactivated') {
-                statusDiv.innerText = "⏳ Ключ найден, но не активирован.";
-                statusDiv.className = "key-status warn";
-                keyInput.classList.add('success');
-                container.classList.add('success');
-            } else if (data.status === 'burned') {
-                statusDiv.innerText = "🔥 Ключ сгорел.";
-                statusDiv.className = "key-status error";
-                keyInput.classList.add('error');
-            } else {
-                statusDiv.innerText = "❌ Ключ не найден.";
-                statusDiv.className = "key-status error";
-                keyInput.classList.add('error');
-            }
-        } else { throw new Error("Server error"); }
-    } catch (e) {
-        btn.classList.remove('loading');
-        statusDiv.innerText = "⚠️ Сервер проверки выключен.";
-        statusDiv.className = "key-status warn";
-        keyInput.classList.add('error');
-    }
-});
+      const response = await fetch(`http://127.0.0.1:8000/check_key?key=${encodeURIComponent(key)}`, { signal: AbortSignal.timeout(7000) });
+      if (!response.ok) throw new Error('Server error');
+      const data = await response.json();
+      if (data.status === 'valid') { keyInput.classList.add('success'); setStatus('Ключ активен. Можно запускать клиент.', 'success'); }
+      else if (data.status === 'unactivated') { keyInput.classList.add('success'); setStatus('Ключ найден, но ещё не активирован.', 'warn'); }
+      else if (data.status === 'burned') { keyInput.classList.add('error'); setStatus('Срок действия ключа завершён.', 'error'); }
+      else { keyInput.classList.add('error'); setStatus('Такой ключ не найден.', 'error'); }
+    } catch { keyInput.classList.add('error'); setStatus('Сервис проверки сейчас недоступен. Попробуй позже.', 'warn'); }
+    finally { keyButton.classList.remove('loading'); keyButton.disabled = false; }
+  });
+}
+
+const toast = document.getElementById('toast');
+let toastTimer;
+function showToast(message) { if (!toast) return; toast.textContent = message; toast.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove('show'), 2600); }
+window.copyCode = async function copyCode(id) {
+  const code = document.getElementById(id); if (!code) return;
+  try { await navigator.clipboard.writeText(code.innerText.trim()); showToast('Код скопирован в буфер обмена'); }
+  catch { showToast('Не удалось скопировать. Выдели код и скопируй вручную.'); }
+};
+document.querySelectorAll('[data-copy-code]').forEach((button) => button.addEventListener('click', () => window.copyCode(button.dataset.copyCode)));
+
+const topLink = document.getElementById('scrollTopBtn');
+if (topLink) { const update = () => topLink.classList.toggle('visible', window.scrollY > 650); window.addEventListener('scroll', update, { passive: true }); update(); }
+
+const code = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let codeIndex = 0;
+document.addEventListener('keydown', (event) => { const next = code[codeIndex]; if (event.key === next || event.key.toLowerCase() === next) { codeIndex++; if (codeIndex === code.length) { document.body.classList.toggle('matrix-mode'); codeIndex = 0; showToast(document.body.classList.contains('matrix-mode') ? 'SIGNAL // ENABLED' : 'SIGNAL // DISABLED'); } } else codeIndex = 0; });
