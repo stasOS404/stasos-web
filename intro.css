@@ -97,6 +97,49 @@ body.intro-locked{overflow:hidden!important}
 .intro-demo-cursor:after{position:absolute;top:2px;left:1px;width:4px;height:9px;background:#fff;content:""}
 @keyframes demo-cursor-flight{0%,12%{opacity:0;transform:translate3d(28px,22px,0) scale(.8)}18%{opacity:1}45%{transform:translate3d(-40px,9px,0) scale(1)}52%,58%{transform:translate3d(-48px,13px,0) scale(.78)}66%{transform:translate3d(-48px,13px,0) scale(1)}84%{opacity:1;transform:translate3d(-13px,-23px,0) scale(.95)}100%{opacity:0;transform:translate3d(28px,22px,0) scale(.8)}}
 @media(prefers-reduced-motion:reduce){.intro-demo-cursor{display:none}}
+.intro-title{perspective:950px;transform-style:preserve-3d}
+.intro-glyph{display:inline-block;opacity:0;transform-origin:50% 100%;animation:kinetic-glyph .75s calc(var(--glyph-delay,0ms) + 110ms) cubic-bezier(.16,1,.3,1) both}
+.intro-title span .intro-glyph{text-shadow:0 0 36px rgba(198,244,50,.13)}
+.intro-title .intro-glyph:nth-child(4n){transform-origin:50% 0}
+.intro-hero-logo:before{position:absolute;inset:-63% -30%;z-index:-2;border:1px solid rgba(198,244,50,.18);border-radius:50%;content:"";transform:rotateX(66deg) rotateZ(-12deg);box-shadow:0 0 0 22px rgba(198,244,50,.015),0 0 38px rgba(198,244,50,.065);animation:logo-ring-orbit 18s linear infinite}
+.intro-hero-logo span{position:relative;z-index:1}
+.intro-atmosphere:after{position:absolute;inset:-20%;background:conic-gradient(from 30deg at 50% 50%,transparent 0 42deg,rgba(198,244,50,.035) 55deg,transparent 71deg 180deg,rgba(255,255,255,.018) 192deg,transparent 208deg);opacity:.45;content:"";animation:atmosphere-spin 48s linear infinite}
+.intro-grid{animation:grid-crawl 18s ease-in-out infinite alternate}
+.intro-screen-glass{box-shadow:0 45px 120px rgba(0,0,0,.5),0 0 70px rgba(198,244,50,.045),inset 0 1px rgba(255,255,255,.055),inset 0 0 55px rgba(255,255,255,.012)}
+.intro-screen-head{position:relative}.intro-screen-head:after{position:absolute;bottom:-1px;left:0;width:var(--scan-width,0%);height:1px;background:var(--intro-lime);box-shadow:0 0 12px rgba(198,244,50,.65);content:"";animation:interface-scan 3.8s .5s ease-in-out infinite}
+.intro-scene.is-active .intro-mini-client{animation:client-drift 7s ease-in-out infinite,client-focus-in 1.1s cubic-bezier(.16,1,.3,1) both}
+.intro-mini-nav{animation:nav-echo 5s ease-in-out infinite}.intro-mini-nav:nth-of-type(2){animation-delay:.5s}.intro-mini-nav:nth-of-type(3){animation-delay:1s}.intro-mini-nav:nth-of-type(4){animation-delay:1.5s}
+.intro-mini-content:after{position:absolute;top:31%;bottom:8%;left:50%;z-index:0;width:1px;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(198,244,50,.24),transparent);content:"";transform:scaleY(0);transform-origin:top}.intro-scene.is-active .intro-mini-content:after{animation:data-beam 2.6s .7s ease-in-out infinite}
+.intro-module-icon{animation:icon-spark 3s ease-in-out infinite}
+.intro-feature-card:first-child{transform-origin:60% 50%}.intro-feature-card:not(:first-child){animation:feature-tilt 6s ease-in-out infinite}.intro-feature-card:nth-child(3){animation-delay:-2s}.intro-feature-card:nth-child(4){animation-delay:-4s}
+.intro-release-date:before{display:inline-block;width:5px;height:5px;margin:0 5px 1px 0;border-radius:50%;background:var(--intro-lime);box-shadow:0 0 9px rgba(198,244,50,.7);content:"";animation:release-signal 1.9s ease-in-out infinite}
+.intro-plan.featured{animation:featured-plan-lift 4.8s ease-in-out infinite;transform-origin:center bottom}
+.intro-map-link{overflow:hidden}.intro-map-link:after{position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,transparent 25%,rgba(198,244,50,.08) 50%,transparent 72%);transform:translateX(-135%);content:""}.intro-scene.is-active .intro-map-link:after{animation:map-card-sweep 1.4s calc(.7s + var(--d,0ms)) ease-out both}
+.intro-map-route path{stroke-width:1.35}
+@keyframes kinetic-glyph{0%{opacity:0;transform:translate3d(0,55%,24px) rotateX(-65deg) scale(.72);filter:blur(10px)}65%{opacity:1;filter:blur(0)}82%{transform:translate3d(0,-4%,0) rotateX(4deg) scale(1.035)}100%{opacity:1;transform:none;filter:blur(0)}}
+@keyframes logo-ring-orbit{to{transform:rotateX(66deg) rotateZ(348deg)}}@keyframes atmosphere-spin{to{transform:rotate(360deg)}}@keyframes grid-crawl{to{background-position:12px 28px;transform:perspective(900px) rotateX(7deg) scale(1.22)}}
+@keyframes interface-scan{0%,15%{width:0%;opacity:0}34%{opacity:1}78%{width:100%;opacity:.8}100%{width:100%;opacity:0}}
+@keyframes client-focus-in{0%{filter:blur(10px);clip-path:inset(0 50% 0 50% round 14px)}65%{filter:blur(0)}100%{clip-path:inset(0 0 0 0 round 14px)}}
+@keyframes nav-echo{0%,75%,100%{border-color:transparent;background:transparent}83%{border-color:rgba(198,244,50,.2);background:rgba(198,244,50,.045)}}
+@keyframes data-beam{0%,100%{opacity:0;transform:scaleY(0)}20%{opacity:.9}62%{opacity:.55;transform:scaleY(1)}80%{opacity:0}}
+@keyframes icon-spark{0%,100%{transform:rotate(0) scale(1);filter:none}42%{transform:rotate(-9deg) scale(1.08);filter:drop-shadow(0 0 8px rgba(198,244,50,.3))}50%{transform:rotate(0) scale(1)}}
+@keyframes feature-tilt{0%,100%{transform:translateY(0) rotateY(0)}50%{transform:translateY(-4px) rotateY(2deg)}}@keyframes release-signal{50%{box-shadow:0 0 15px 3px rgba(198,244,50,.6)}}@keyframes featured-plan-lift{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.025)}}@keyframes map-card-sweep{0%{transform:translateX(-135%);opacity:0}20%{opacity:1}100%{transform:translateX(135%);opacity:0}}
+@media(prefers-reduced-motion:reduce){.intro-glyph{opacity:1;animation:none!important;transform:none!important;filter:none!important}.intro-hero-logo:before,.intro-atmosphere:after,.intro-grid,.intro-screen-head:after,.intro-mini-nav,.intro-mini-content:after,.intro-module-icon,.intro-feature-card,.intro-release-date:before,.intro-plan.featured,.intro-map-link:after{animation:none!important}.intro-mini-nav{transform:none}}
 .stas-intro.copy-arrive .intro-step-meta{animation:copy-fade-up .58s cubic-bezier(.16,1,.3,1) both}.stas-intro.copy-arrive .intro-kicker{animation:copy-fade-up .62s .05s cubic-bezier(.16,1,.3,1) both}.stas-intro.copy-arrive .intro-title{animation:copy-fade-up .76s .1s cubic-bezier(.16,1,.3,1) both}.stas-intro.copy-arrive .intro-description{animation:copy-fade-up .72s .2s cubic-bezier(.16,1,.3,1) both}.stas-intro.copy-arrive .intro-proof{animation:copy-fade-up .65s .32s cubic-bezier(.16,1,.3,1) both}
 .intro-scene.is-active .intro-map-route path{animation:route-draw 4.6s .35s cubic-bezier(.2,.75,.2,1) forwards,route-trace 3s 5s linear infinite}
 @media(prefers-reduced-motion:reduce){.stas-intro.copy-arrive .intro-step-meta,.stas-intro.copy-arrive .intro-kicker,.stas-intro.copy-arrive .intro-title,.stas-intro.copy-arrive .intro-description,.stas-intro.copy-arrive .intro-proof{animation:none!important}}
+/* Alternating cinematic wipes keep chapter changes from feeling templated. */
+.stas-intro.is-folding .intro-cut-sweep{inset:-24%;z-index:10;opacity:1;background:linear-gradient(180deg,transparent 35%,rgba(198,244,50,.08) 47%,rgba(255,255,255,.9) 50%,rgba(198,244,50,.22) 53%,transparent 65%);transform:translate3d(0,-125%,0);filter:blur(3px);animation:film-fold 1.08s cubic-bezier(.68,0,.25,1) both}
+.stas-intro.is-folding .intro-lens-flare{animation:lens-fold 1.08s cubic-bezier(.5,0,.3,1) both}.stas-intro.is-folding:before,.stas-intro.is-folding:after{transform:scaleY(1)}
+.stas-intro.is-radial .intro-cut-sweep{inset:-20%;z-index:10;opacity:1;background:radial-gradient(circle,rgba(198,244,50,.2),rgba(198,244,50,.07) 23%,transparent 62%);transform:scale(.05);filter:blur(15px);animation:portal-bloom 1.08s cubic-bezier(.16,1,.3,1) both}
+@keyframes film-fold{0%{opacity:0;transform:translate3d(0,-125%,0)}18%{opacity:1}55%{opacity:1;transform:translate3d(0,0,0)}100%{opacity:0;transform:translate3d(0,125%,0)}}
+@keyframes lens-fold{0%{top:-15%;left:0;opacity:0}38%{opacity:.9}100%{top:110%;left:100%;opacity:0}}
+@keyframes portal-bloom{0%{opacity:0;transform:scale(.05)}35%{opacity:1}100%{opacity:0;transform:scale(1.35)}}
+.intro-demo-cursor{top:70%;left:93%;animation:demo-cursor-flight-v2 4.8s 1.05s cubic-bezier(.42,0,.24,1) infinite}
+.intro-mini-content>.intro-mini-row:nth-of-type(3) .intro-mini-switch{animation:demo-toggle-track 4.8s 1.05s infinite}
+.intro-mini-content>.intro-mini-row:nth-of-type(3) .intro-mini-switch:after{animation:demo-toggle-knob 4.8s 1.05s infinite}
+@keyframes demo-cursor-flight-v2{0%,12%{opacity:0;transform:translate3d(24px,34px,0) scale(.8)}18%{opacity:1}45%{transform:translate3d(-13px,7px,0) scale(1)}52%,58%{transform:translate3d(-15px,10px,0) scale(.76)}66%{transform:translate3d(-15px,10px,0) scale(1)}84%{opacity:1;transform:translate3d(25px,-22px,0) scale(.95)}100%{opacity:0;transform:translate3d(24px,34px,0) scale(.8)}}
+@keyframes demo-toggle-track{0%,43%,68%,100%{background:rgba(198,244,50,.24);box-shadow:0 0 0 rgba(198,244,50,0)}47%,62%{background:#29292f;box-shadow:0 0 12px rgba(255,255,255,.08)}}
+@keyframes demo-toggle-knob{0%,43%,68%,100%{transform:translateX(0);background:var(--intro-lime)}47%,62%{transform:translateX(-11px);background:#777781}}
+@media(prefers-reduced-motion:reduce){.stas-intro.is-folding .intro-cut-sweep,.stas-intro.is-radial .intro-cut-sweep,.stas-intro.is-folding .intro-lens-flare,.intro-demo-cursor,.intro-mini-content>.intro-mini-row:nth-of-type(3) .intro-mini-switch,.intro-mini-content>.intro-mini-row:nth-of-type(3) .intro-mini-switch:after{animation:none!important;display:none}}
+.stas-intro .intro-demo-cursor{top:70%;left:93%;animation:demo-cursor-flight-v2 4.8s 1.05s cubic-bezier(.42,0,.24,1) infinite}

@@ -115,6 +115,7 @@
   let cutTimer = 0;
   let particleFrame = 0;
   let particles = [];
+  let streaks = [];
   let particleWidth = 0;
   let particleHeight = 0;
   let particleScale = 1;
@@ -125,6 +126,28 @@
     if (scene.id === 'welcome') return `<div class="intro-scene-inner">${scene.visual}</div>`;
     return `<div class="intro-scene-inner"><div class="intro-screen-glass">${visualHeader}<div class="intro-surface">${scene.visual}</div></div></div>`;
   };
+
+  function animateTitleGlyphs() {
+    const walker = document.createTreeWalker(title, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+    let glyphIndex = 0;
+    textNodes.forEach((textNode) => {
+      const fragment = document.createDocumentFragment();
+      for (const character of textNode.nodeValue) {
+        if (/\s/.test(character)) fragment.append(document.createTextNode(character));
+        else {
+          const glyph = document.createElement('span');
+          glyph.className = 'intro-glyph';
+          glyph.style.setProperty('--glyph-delay', `${Math.min(glyphIndex * 17, 510)}ms`);
+          glyph.textContent = character;
+          fragment.append(glyph);
+          glyphIndex++;
+        }
+      }
+      textNode.replaceWith(fragment);
+    });
+  }
 
   function sizeParticles() {
     const ctx = particleCanvas.getContext('2d');
@@ -140,6 +163,11 @@
       vx: (Math.random() - .5) * .19, vy: (Math.random() - .5) * .16,
       radius: Math.random() * 1.45 + .35, alpha: Math.random() * .35 + .12,
       phase: Math.random() * Math.PI * 2, drift: Math.random() * .35 + .12
+    }));
+    streaks = Array.from({ length: reduceForThisRun ? 0 : 5 }, () => ({
+      x: Math.random() * particleWidth, y: Math.random() * particleHeight,
+      length: Math.random() * 78 + 36, speed: Math.random() * .65 + .3,
+      alpha: Math.random() * .14 + .045, wait: Math.random() * 360
     }));
   }
 
@@ -179,6 +207,24 @@
         }
       }
     }
+    for (const streak of streaks) {
+      if (streak.wait > 0) { streak.wait--; continue; }
+      streak.x += streak.speed * 1.8;
+      streak.y -= streak.speed * .72;
+      if (streak.x > particleWidth + streak.length || streak.y < -streak.length) {
+        streak.x = Math.random() * particleWidth * .7 - streak.length;
+        streak.y = particleHeight * (.25 + Math.random() * .85);
+        streak.wait = Math.random() * 520 + 140;
+      }
+      const tailX = streak.x - streak.length;
+      const tailY = streak.y + streak.length * .4;
+      const beam = ctx.createLinearGradient(tailX, tailY, streak.x, streak.y);
+      beam.addColorStop(0, 'rgba(198,244,50,0)');
+      beam.addColorStop(.76, `rgba(198,244,50,${streak.alpha})`);
+      beam.addColorStop(1, 'rgba(255,255,255,.82)');
+      ctx.beginPath(); ctx.strokeStyle = beam; ctx.lineWidth = .7;
+      ctx.moveTo(tailX, tailY); ctx.lineTo(streak.x, streak.y); ctx.stroke();
+    }
     if (!reduceForThisRun) particleFrame = requestAnimationFrame(drawParticles);
   }
   sizeParticles();
@@ -203,10 +249,11 @@
     current = index;
     if (index > 0) {
       clearTimeout(cutTimer);
-      film.classList.remove('is-cutting');
+      film.classList.remove('is-cutting', 'is-folding', 'is-radial');
       void film.offsetWidth;
-      film.classList.add('is-cutting');
-      cutTimer = window.setTimeout(() => film.classList.remove('is-cutting'), 1120);
+      const transition = ['is-cutting', 'is-folding', 'is-radial'][(index - 1) % 3];
+      film.classList.add(transition);
+      cutTimer = window.setTimeout(() => film.classList.remove('is-cutting', 'is-folding', 'is-radial'), 1120);
     }
     const scene = scenes[index];
     film.querySelectorAll('.intro-scene').forEach((node) => node.classList.remove('is-active'));
@@ -232,6 +279,7 @@
       stage.append(sceneElement);
     }
     title.innerHTML = scene.title;
+    animateTitleGlyphs();
     description.textContent = scene.description;
     kicker.textContent = scene.kicker;
     chapter.textContent = scene.chapter;
