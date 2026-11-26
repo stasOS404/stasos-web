@@ -64,6 +64,18 @@
     <footer class="intro-foot"><div class="intro-chapter-label">A PERSONAL PROJECT / MADE WITH CARE</div><div class="intro-progress"><div class="intro-progress-track" id="intro-progress-track" role="progressbar" aria-label="Прогресс вступления" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i class="intro-progress-fill" id="intro-progress-fill"></i></div><span class="intro-step-count" id="intro-step-count">01 / 07</span></div><div class="intro-skip-wrap"><span class="intro-skip-hint">Удерживай <strong>ПРОБЕЛ</strong> 2 сек., чтобы пропустить</span><button class="intro-skip" id="intro-skip" type="button" aria-label="Удерживай, чтобы пропустить вступление"><span class="intro-skip-symbol">Ⅱ</span><span>УДЕРЖИВАТЬ, ЧТОБЫ ПРОПУСТИТЬ</span><i class="intro-skip-hold-ring"></i></button></div></footer>`;
 
   document.body.append(film);
+  const particleCanvas = document.createElement('canvas');
+  particleCanvas.className = 'intro-particles';
+  particleCanvas.setAttribute('aria-hidden', 'true');
+  film.prepend(particleCanvas);
+  const cutSweep = document.createElement('div');
+  cutSweep.className = 'intro-cut-sweep';
+  cutSweep.setAttribute('aria-hidden', 'true');
+  film.append(cutSweep);
+  const lensFlare = document.createElement('div');
+  lensFlare.className = 'intro-lens-flare';
+  lensFlare.setAttribute('aria-hidden', 'true');
+  film.append(lensFlare);
   document.body.classList.add('intro-locked');
   const introMain = film.querySelector('.intro-main');
   if (introMain?.tagName === 'MAIN') {
@@ -100,6 +112,12 @@
   let reduceForThisRun = reduceMotion.matches;
   let sceneDuration = 0;
   let sceneElapsed = 0;
+  let cutTimer = 0;
+  let particleFrame = 0;
+  let particles = [];
+  let particleWidth = 0;
+  let particleHeight = 0;
+  let particleScale = 1;
   const initialHash = window.location.hash;
 
   const marker = (scene, index) => {
@@ -108,10 +126,88 @@
     return `<div class="intro-scene-inner"><div class="intro-screen-glass">${visualHeader}<div class="intro-surface">${scene.visual}</div></div></div>`;
   };
 
+  function sizeParticles() {
+    const ctx = particleCanvas.getContext('2d');
+    if (!ctx) return;
+    particleScale = Math.min(window.devicePixelRatio || 1, 1.5);
+    particleWidth = window.innerWidth; particleHeight = window.innerHeight;
+    particleCanvas.width = Math.round(particleWidth * particleScale);
+    particleCanvas.height = Math.round(particleHeight * particleScale);
+    ctx.setTransform(particleScale, 0, 0, particleScale, 0, 0);
+    const count = reduceForThisRun ? 24 : Math.min(82, Math.max(38, Math.round(particleWidth * particleHeight / 14500)));
+    particles = Array.from({ length: count }, () => ({
+      x: Math.random() * particleWidth, y: Math.random() * particleHeight,
+      vx: (Math.random() - .5) * .19, vy: (Math.random() - .5) * .16,
+      radius: Math.random() * 1.45 + .35, alpha: Math.random() * .35 + .12,
+      phase: Math.random() * Math.PI * 2, drift: Math.random() * .35 + .12
+    }));
+  }
+
+  function drawParticles(time = 0) {
+    const ctx = particleCanvas.getContext('2d');
+    if (!ctx || isClosed || document.hidden) return;
+    ctx.clearRect(0, 0, particleWidth, particleHeight);
+    const px = parseFloat(film.style.getPropertyValue('--pointer-x')) || particleWidth * .5;
+    const py = parseFloat(film.style.getPropertyValue('--pointer-y')) || particleHeight * .5;
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      if (!reduceForThisRun) {
+        p.x += p.vx + Math.sin(time * .00022 + p.phase) * .06;
+        p.y += p.vy - p.drift * .08;
+        if (p.x < -10) p.x = particleWidth + 10;
+        if (p.x > particleWidth + 10) p.x = -10;
+        if (p.y < -10) p.y = particleHeight + 10;
+        if (p.y > particleHeight + 10) p.y = -10;
+      }
+      const dxp = p.x - px, dyp = p.y - py;
+      const focus = Math.max(0, 1 - Math.hypot(dxp, dyp) / 230);
+      const twinkle = .72 + Math.sin(time * .0013 + p.phase) * .28;
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(198,244,50,${(p.alpha + focus * .5) * twinkle})`;
+      ctx.arc(p.x, p.y, p.radius + focus * 1.4, 0, Math.PI * 2);
+      ctx.fill();
+      if (!reduceForThisRun && i % 2 === 0) {
+        for (let j = i + 1; j < particles.length; j += 2) {
+          const q = particles[j];
+          const distance = Math.hypot(p.x - q.x, p.y - q.y);
+          if (distance < 94) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(198,244,50,${(1 - distance / 94) * .075})`;
+            ctx.lineWidth = .55;
+            ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke();
+          }
+        }
+      }
+    }
+    if (!reduceForThisRun) particleFrame = requestAnimationFrame(drawParticles);
+  }
+  sizeParticles();
+  drawParticles();
+  const updatePointerParallax = (event) => {
+    film.style.setProperty('--pointer-x', `${event.clientX}px`);
+    film.style.setProperty('--pointer-y', `${event.clientY}px`);
+    film.style.setProperty('--pointer-tilt-x', `${(event.clientX / Math.max(1, innerWidth) - .5) * 1.6}deg`);
+    film.style.setProperty('--pointer-tilt-y', `${(.5 - event.clientY / Math.max(1, innerHeight)) * 1.3}deg`);
+  };
+  const manageParticleVisibility = () => {
+    cancelAnimationFrame(particleFrame);
+    if (!document.hidden && !reduceForThisRun && !isClosed) drawParticles();
+  };
+  window.addEventListener('resize', sizeParticles, { passive: true });
+  window.addEventListener('pointermove', updatePointerParallax, { passive: true });
+  document.addEventListener('visibilitychange', manageParticleVisibility);
+
   function setScene(index) {
     if (isClosed) return;
     if (index >= scenes.length) { closeIntro(); return; }
     current = index;
+    if (index > 0) {
+      clearTimeout(cutTimer);
+      film.classList.remove('is-cutting');
+      void film.offsetWidth;
+      film.classList.add('is-cutting');
+      cutTimer = window.setTimeout(() => film.classList.remove('is-cutting'), 1120);
+    }
     const scene = scenes[index];
     film.querySelectorAll('.intro-scene').forEach((node) => node.classList.remove('is-active'));
     let sceneElement = film.querySelector(`.intro-scene[data-scene="${scene.id}"]`);
@@ -120,6 +216,19 @@
       sceneElement.className = 'intro-scene';
       sceneElement.dataset.scene = scene.id;
       sceneElement.innerHTML = marker(scene, index);
+      if (scene.id === 'system') {
+        const demoCursor = document.createElement('i');
+        demoCursor.className = 'intro-demo-cursor';
+        demoCursor.setAttribute('aria-hidden', 'true');
+        sceneElement.querySelector('.intro-mini-client')?.append(demoCursor);
+      }
+      if (scene.id === 'map') {
+        const route = document.createElement('div');
+        route.className = 'intro-map-route';
+        route.setAttribute('aria-hidden', 'true');
+        route.innerHTML = `<svg viewBox="0 0 300 300" preserveAspectRatio="none"><path d="M50 48 C90 48 100 48 150 48 S210 48 250 48 L250 150 C250 202 210 252 150 252 S90 252 50 252 L50 150 C50 104 100 48 150 48"/></svg>`;
+        sceneElement.querySelector('.intro-map')?.prepend(route);
+      }
       stage.append(sceneElement);
     }
     title.innerHTML = scene.title;
@@ -131,7 +240,11 @@
     proof.replaceChildren(...scene.proof.map((label) => { const item = document.createElement('span'); item.textContent = label; return item; }));
     requestAnimationFrame(() => sceneElement.classList.add('is-active'));
     film.dataset.scene = scene.id;
+    film.style.setProperty('--scene-number', String(index));
     stage.setAttribute('aria-hidden', scene.id === 'map' ? 'false' : 'true');
+    film.classList.remove('copy-arrive');
+    void film.offsetWidth;
+    film.classList.add('copy-arrive');
     const duration = reduceForThisRun ? 2400 : scene.duration;
     sceneDuration = duration;
     sceneElapsed = 0;
@@ -158,6 +271,11 @@
     skipButton.style.setProperty('--hold-progress', '0%');
     film.classList.add('is-closing');
     document.body.classList.remove('intro-locked');
+    cancelAnimationFrame(particleFrame);
+    clearTimeout(cutTimer);
+    window.removeEventListener('resize', sizeParticles);
+    window.removeEventListener('pointermove', updatePointerParallax);
+    document.removeEventListener('visibilitychange', manageParticleVisibility);
     try { localStorage.setItem(SEEN_KEY, '1'); } catch { /* Private browsing may disable storage. */ }
     focusTargets.forEach((node, i) => { node.inert = priorInert[i]; });
     window.setTimeout(() => {
@@ -239,6 +357,10 @@
   try {
     if (localStorage.getItem(SEEN_KEY) === '1') {
       isClosed = true;
+      cancelAnimationFrame(particleFrame);
+      window.removeEventListener('resize', sizeParticles);
+      window.removeEventListener('pointermove', updatePointerParallax);
+      document.removeEventListener('visibilitychange', manageParticleVisibility);
       document.body.classList.remove('intro-locked');
       focusTargets.forEach((node, i) => { node.inert = priorInert[i]; });
       film.remove();
