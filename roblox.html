@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="enhancements.css"><link rel="stylesheet" href="enhancements-pages.css">
-  <script src="script.js" defer></script><script src="enhancements.js" defer></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body class="rbx-page">
   <canvas id="bg-particles" aria-hidden="true"></canvas><div class="ambient ambient-one" aria-hidden="true"></div><div class="ambient ambient-two" aria-hidden="true"></div><div class="noise" aria-hidden="true"></div>
@@ -38,185 +38,14 @@
         <p class="script-desc">Материал для Murder Mystery 2. Перед запуском ознакомься с правилами игры и используй на свой риск.</p>
         <div class="script-features"><span class="feature-tag">MURDER MYSTERY 2</span><span class="feature-tag">ONE-CLICK COPY</span><span class="feature-tag">COMMUNITY RELEASE</span></div>
         <div class="script-actions"><p>Перед запуском проверь совместимость и актуальность версии.</p><button class="copy-btn" onclick="copyCode('mm2-code')">СКОПИРОВАТЬ МАТЕРИАЛ <span aria-hidden="true">↗</span></button></div>
-        <div id="mm2-code" style="display:none;">
--- Вставь этот код в инжектор
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local LocalPlayer = Players.LocalPlayer
-local Workspace = game:GetService("Workspace")
-
-local ACCENT = Color3.fromRGB(198, 244, 50)
-local ROLE_COLORS = {
-    ["Murderer"] = Color3.fromRGB(255, 71, 87),
-    ["Sheriff"] = Color3.fromRGB(52, 152, 219),
-    ["Innocent"] = Color3.fromRGB(198, 244, 50)
-}
-
-local espEnabled = true
-local itemEspEnabled = true
-local autoPickupEnabled = false
-
-local function updateRoles()
-    for _, player in ipairs(Players:GetPlayers()) do
-        if player == LocalPlayer then continue end
-        if not player.Character then continue end
-        local char = player.Character
-        local humanoid = char:FindFirstChild("Humanoid")
-        if not humanoid then continue end
-        local role = "Innocent"
-        local color = ROLE_COLORS.Innocent
-        local backpack = player:FindFirstChild("Backpack")
-        local hasKnife = false
-        local hasGun = false
-        if backpack then
-            for _, item in ipairs(backpack:GetChildren()) do
-                if item.Name == "Knife" then hasKnife = true end
-                if item.Name == "Gun" then hasGun = true end
-            end
-        end
-        if char:FindFirstChild("Knife") then hasKnife = true end
-        if char:FindFirstChild("Gun") then hasGun = true end
-        if hasKnife then role = "Murderer"; color = ROLE_COLORS.Murderer end
-        if hasGun then role = "Sheriff"; color = ROLE_COLORS.Sheriff end
-        local highlight = char:FindFirstChild("stasOS_Highlight")
-        if not highlight then
-            highlight = Instance.new("Highlight")
-            highlight.Name = "stasOS_Highlight"
-            highlight.Parent = char
-        end
-        highlight.FillColor = color
-        highlight.OutlineColor = Color3.new(1,1,1)
-        highlight.Enabled = espEnabled
-        local billboard = char:FindFirstChild("stasOS_Billboard")
-        if not billboard and char:FindFirstChild("Head") then
-            billboard = Instance.new("BillboardGui")
-            billboard.Name = "stasOS_Billboard"
-            billboard.Size = UDim2.new(0, 200, 0, 50)
-            billboard.StudsOffset = Vector3.new(0, 2.5, 0)
-            billboard.AlwaysOnTop = true
-            billboard.Parent = char.Head
-            local label = Instance.new("TextLabel")
-            label.Name = "RoleText"
-            label.Size = UDim2.new(1, 0, 1, 0)
-            label.BackgroundTransparency = 1
-            label.TextScaled = true
-            label.Font = Enum.Font.GothamBlack
-            label.TextStrokeTransparency = 0
-            label.Parent = billboard
-        end
-        if billboard then
-            billboard.Enabled = espEnabled
-            local label = billboard:FindFirstChild("RoleText")
-            if label then
-                label.Text = player.Name .. " [" .. role .. "]"
-                label.TextColor3 = color
-            end
-        end
-    end
-end
-
-local function updateItems()
-    for _, item in ipairs(Workspace:GetChildren()) do
-        if item.Name == "Knife" or item.Name == "Gun" then
-            if item:IsA("Model") or item:IsA("Tool") then
-                local highlight = item:FindFirstChild("stasOS_ItemHighlight")
-                if not highlight then
-                    highlight = Instance.new("Highlight")
-                    highlight.Name = "stasOS_ItemHighlight"
-                    highlight.Parent = item
-                end
-                highlight.FillColor = (item.Name == "Gun") and ROLE_COLORS.Sheriff or ROLE_COLORS.Murderer
-                highlight.OutlineColor = Color3.new(1,1,1)
-                highlight.Enabled = itemEspEnabled
-            end
-        end
-    end
-end
-
-local function autoPickup()
-    if not autoPickupEnabled then return end
-    local char = LocalPlayer.Character
-    if not char then return end
-    local root = char:FindFirstChild("HumanoidRootPart")
-    if not root then return end
-    for _, item in ipairs(Workspace:GetChildren()) do
-        if item.Name == "Knife" or item.Name == "Gun" then
-            local itemPos = item:IsA("Model") and item.PrimaryPart.Position or item:IsA("Tool") and item.Handle.Position
-            if itemPos and (itemPos - root.Position).Magnitude < 10 then
-                root.CFrame = CFrame.new(itemPos)
-            end
-        end
-    end
-end
-
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "stasOS_MM2"
-ScreenGui.ResetOnSpawn = false
-ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
-
-local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 250, 0, 180)
-MainFrame.Position = UDim2.new(0.5, -125, 0.5, -90)
-MainFrame.BackgroundColor3 = Color3.fromRGB(11, 11, 14)
-MainFrame.BorderSizePixel = 2
-MainFrame.BorderColor3 = ACCENT
-MainFrame.Parent = ScreenGui
-
-local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, 0, 0, 30)
-Title.BackgroundColor3 = ACCENT
-Title.Text = "stasOS | MM2"
-Title.TextColor3 = Color3.fromRGB(0, 0, 0)
-Title.Font = Enum.Font.GothamBlack
-Title.TextScaled = true
-Title.Parent = MainFrame
-
-local function createBtn(text, yPos)
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(1, -20, 0, 30)
-    btn.Position = UDim2.new(0, 10, 0, yPos)
-    btn.BackgroundColor3 = Color3.fromRGB(22, 22, 26)
-    btn.Text = text
-    btn.TextColor3 = Color3.new(1,1,1)
-    btn.Font = Enum.Font.GothamBold
-    btn.Parent = MainFrame
-    return btn
-end
-
-local EspBtn = createBtn("Role ESP: ON", 40)
-local ItemBtn = createBtn("Item ESP: ON", 80)
-local PickupBtn = createBtn("Auto Pickup: OFF", 120)
-
-EspBtn.MouseButton1Click:Connect(function()
-    espEnabled = not espEnabled
-    EspBtn.Text = "Role ESP: " .. (espEnabled and "ON" or "OFF")
-    EspBtn.TextColor3 = espEnabled and ACCENT or Color3.new(1,1,1)
-end)
-
-ItemBtn.MouseButton1Click:Connect(function()
-    itemEspEnabled = not itemEspEnabled
-    ItemBtn.Text = "Item ESP: " .. (itemEspEnabled and "ON" or "OFF")
-    ItemBtn.TextColor3 = itemEspEnabled and ACCENT or Color3.new(1,1,1)
-end)
-
-PickupBtn.MouseButton1Click:Connect(function()
-    autoPickupEnabled = not autoPickupEnabled
-    PickupBtn.Text = "Auto Pickup: " .. (autoPickupEnabled and "ON" or "OFF")
-    PickupBtn.TextColor3 = autoPickupEnabled and ACCENT or Color3.new(1,1,1)
-end)
-
-RunService.RenderStepped:Connect(function()
-    updateRoles()
-    updateItems()
-    autoPickup()
-end)
-            </div>
+        __MM2_CODE_BLOCK__
       </article>
       <article class="script-card soon reveal"><div class="script-card-top"><div><div class="script-id">ROBLOX / NEXT DROP</div><h3 class="script-title">Следующий релиз</h3></div><span class="badge-free">SOON</span></div><p class="script-desc">Новая карточка появится здесь после подготовки и публикации обновления.</p></article>
       <div class="rbx-bottom-note"><span><b>STASOS LIBRARY</b> / Обновления и новости</span><a href="https://t.me/stasOS_Cheat_bot">Перейти в Telegram ↗</a></div>
     </section>
   </main>
-  <footer class="site-footer rbx-footer"><a class="logo" href="index.html"><span>stas</span>OS<i></i></a><span>© <span data-year>2026</span> STASOS</span><div class="footer-links"><a href="index.html">Главная</a><a href="https://t.me/stasOS_Cheat_bot">Telegram ↗</a></div></footer>
+  <footer class="site-footer rbx-footer"><a class="logo" href="index.html"><span>stas</span>OS<i></i></a><span>© <span id="year"></span> STASOS</span><div class="footer-links"><a href="index.html">Главная</a><a href="https://t.me/stasOS_Cheat_bot">Telegram ↗</a></div></footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
+<!-- Roblox library page used by the main stasOS site. -->

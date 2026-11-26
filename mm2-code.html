@@ -1,0 +1,173 @@
+<div id="mm2-code" style="display:none;">
+-- Вставь этот код в инжектор
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local Workspace = game:GetService("Workspace")
+
+local ACCENT = Color3.fromRGB(198, 244, 50)
+local ROLE_COLORS = {
+    ["Murderer"] = Color3.fromRGB(255, 71, 87),
+    ["Sheriff"] = Color3.fromRGB(52, 152, 219),
+    ["Innocent"] = Color3.fromRGB(198, 244, 50)
+}
+
+local espEnabled = true
+local itemEspEnabled = true
+local autoPickupEnabled = false
+
+local function updateRoles()
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player == LocalPlayer then continue end
+        if not player.Character then continue end
+        local char = player.Character
+        local humanoid = char:FindFirstChild("Humanoid")
+        if not humanoid then continue end
+        local role = "Innocent"
+        local color = ROLE_COLORS.Innocent
+        local backpack = player:FindFirstChild("Backpack")
+        local hasKnife = false
+        local hasGun = false
+        if backpack then
+            for _, item in ipairs(backpack:GetChildren()) do
+                if item.Name == "Knife" then hasKnife = true end
+                if item.Name == "Gun" then hasGun = true end
+            end
+        end
+        if char:FindFirstChild("Knife") then hasKnife = true end
+        if char:FindFirstChild("Gun") then hasGun = true end
+        if hasKnife then role = "Murderer"; color = ROLE_COLORS.Murderer end
+        if hasGun then role = "Sheriff"; color = ROLE_COLORS.Sheriff end
+        local highlight = char:FindFirstChild("stasOS_Highlight")
+        if not highlight then
+            highlight = Instance.new("Highlight")
+            highlight.Name = "stasOS_Highlight"
+            highlight.Parent = char
+        end
+        highlight.FillColor = color
+        highlight.OutlineColor = Color3.new(1,1,1)
+        highlight.Enabled = espEnabled
+        local billboard = char:FindFirstChild("stasOS_Billboard")
+        if not billboard and char:FindFirstChild("Head") then
+            billboard = Instance.new("BillboardGui")
+            billboard.Name = "stasOS_Billboard"
+            billboard.Size = UDim2.new(0, 200, 0, 50)
+            billboard.StudsOffset = Vector3.new(0, 2.5, 0)
+            billboard.AlwaysOnTop = true
+            billboard.Parent = char.Head
+            local label = Instance.new("TextLabel")
+            label.Name = "RoleText"
+            label.Size = UDim2.new(1, 0, 1, 0)
+            label.BackgroundTransparency = 1
+            label.TextScaled = true
+            label.Font = Enum.Font.GothamBlack
+            label.TextStrokeTransparency = 0
+            label.Parent = billboard
+        end
+        if billboard then
+            billboard.Enabled = espEnabled
+            local label = billboard:FindFirstChild("RoleText")
+            if label then
+                label.Text = player.Name .. " [" .. role .. "]"
+                label.TextColor3 = color
+            end
+        end
+    end
+end
+
+local function updateItems()
+    for _, item in ipairs(Workspace:GetChildren()) do
+        if item.Name == "Knife" or item.Name == "Gun" then
+            if item:IsA("Model") or item:IsA("Tool") then
+                local highlight = item:FindFirstChild("stasOS_ItemHighlight")
+                if not highlight then
+                    highlight = Instance.new("Highlight")
+                    highlight.Name = "stasOS_ItemHighlight"
+                    highlight.Parent = item
+                end
+                highlight.FillColor = (item.Name == "Gun") and ROLE_COLORS.Sheriff or ROLE_COLORS.Murderer
+                highlight.OutlineColor = Color3.new(1,1,1)
+                highlight.Enabled = itemEspEnabled
+            end
+        end
+    end
+end
+
+local function autoPickup()
+    if not autoPickupEnabled then return end
+    local char = LocalPlayer.Character
+    if not char then return end
+    local root = char:FindFirstChild("HumanoidRootPart")
+    if not root then return end
+    for _, item in ipairs(Workspace:GetChildren()) do
+        if item.Name == "Knife" or item.Name == "Gun" then
+            local itemPos = item:IsA("Model") and item.PrimaryPart.Position or item:IsA("Tool") and item.Handle.Position
+            if itemPos and (itemPos - root.Position).Magnitude < 10 then
+                root.CFrame = CFrame.new(itemPos)
+            end
+        end
+    end
+end
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "stasOS_MM2"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 250, 0, 180)
+MainFrame.Position = UDim2.new(0.5, -125, 0.5, -90)
+MainFrame.BackgroundColor3 = Color3.fromRGB(11, 11, 14)
+MainFrame.BorderSizePixel = 2
+MainFrame.BorderColor3 = ACCENT
+MainFrame.Parent = ScreenGui
+
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.BackgroundColor3 = ACCENT
+Title.Text = "stasOS | MM2"
+Title.TextColor3 = Color3.fromRGB(0, 0, 0)
+Title.Font = Enum.Font.GothamBlack
+Title.TextScaled = true
+Title.Parent = MainFrame
+
+local function createBtn(text, yPos)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(1, -20, 0, 30)
+    btn.Position = UDim2.new(0, 10, 0, yPos)
+    btn.BackgroundColor3 = Color3.fromRGB(22, 22, 26)
+    btn.Text = text
+    btn.TextColor3 = Color3.new(1,1,1)
+    btn.Font = Enum.Font.GothamBold
+    btn.Parent = MainFrame
+    return btn
+end
+
+local EspBtn = createBtn("Role ESP: ON", 40)
+local ItemBtn = createBtn("Item ESP: ON", 80)
+local PickupBtn = createBtn("Auto Pickup: OFF", 120)
+
+EspBtn.MouseButton1Click:Connect(function()
+    espEnabled = not espEnabled
+    EspBtn.Text = "Role ESP: " .. (espEnabled and "ON" or "OFF")
+    EspBtn.TextColor3 = espEnabled and ACCENT or Color3.new(1,1,1)
+end)
+
+ItemBtn.MouseButton1Click:Connect(function()
+    itemEspEnabled = not itemEspEnabled
+    ItemBtn.Text = "Item ESP: " .. (itemEspEnabled and "ON" or "OFF")
+    ItemBtn.TextColor3 = itemEspEnabled and ACCENT or Color3.new(1,1,1)
+end)
+
+PickupBtn.MouseButton1Click:Connect(function()
+    autoPickupEnabled = not autoPickupEnabled
+    PickupBtn.Text = "Auto Pickup: " .. (autoPickupEnabled and "ON" or "OFF")
+    PickupBtn.TextColor3 = autoPickupEnabled and ACCENT or Color3.new(1,1,1)
+end)
+
+RunService.RenderStepped:Connect(function()
+    updateRoles()
+    updateItems()
+    autoPickup()
+end)
+            </div>

@@ -84,3 +84,5 @@ if (topLink) { const update = () => topLink.classList.toggle('visible', window.s
 const code = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
 let codeIndex = 0;
 document.addEventListener('keydown', (event) => { const next = code[codeIndex]; if (event.key === next || event.key.toLowerCase() === next) { codeIndex++; if (codeIndex === code.length) { document.body.classList.toggle('matrix-mode'); codeIndex = 0; showToast(document.body.classList.contains('matrix-mode') ? 'SIGNAL // ENABLED' : 'SIGNAL // DISABLED'); } } else codeIndex = 0; });
+/* Homepage interactions; first-visit intro is loaded separately from intro.js. */
+/* The first-visit guided film is loaded from intro.js by index.html. */
