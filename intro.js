@@ -76,6 +76,30 @@
   lensFlare.className = 'intro-lens-flare';
   lensFlare.setAttribute('aria-hidden', 'true');
   film.append(lensFlare);
+  const depthField = document.createElement('div');
+  depthField.className = 'intro-depth-field';
+  depthField.setAttribute('aria-hidden', 'true');
+  const moteFragment = document.createDocumentFragment();
+  for (let index = 0; index < 50; index++) {
+    const mote = document.createElement('i');
+    mote.className = `intro-mote intro-mote-${index % 5}`;
+    const seed = (index * 37 + 13) % 101;
+    mote.style.setProperty('--mote-x', `${(index * 67 + seed * 11) % 100}%`);
+    mote.style.setProperty('--mote-y', `${(index * 43 + seed * 7) % 100}%`);
+    mote.style.setProperty('--mote-size', `${index % 9 === 0 ? 2.4 : index % 4 === 0 ? 1.7 : 1.1}px`);
+    mote.style.setProperty('--mote-duration', `${7 + (index * 13 % 17)}s`);
+    mote.style.setProperty('--mote-delay', `${-(index * 19 % 24)}s`);
+    mote.style.setProperty('--mote-dx', `${((index * 17) % 31) - 15}px`);
+    mote.style.setProperty('--mote-dy', `${((index * 23) % 35) - 17}px`);
+    mote.style.setProperty('--mote-dx-back', `${-(((index * 17) % 31) - 15) * .35}px`);
+    mote.style.setProperty('--mote-dy-back', `${-(((index * 23) % 35) - 17) * .55}px`);
+    mote.style.setProperty('--mote-z', `${(index % 7) * 14 - 42}px`);
+    mote.style.setProperty('--mote-alpha', `${.06 + (index % 5) * .025}`);
+    mote.style.setProperty('--mote-peak', `${.18 + (index % 4) * .09}`);
+    moteFragment.append(mote);
+  }
+  depthField.append(moteFragment);
+  film.append(depthField);
   document.body.classList.add('intro-locked');
   const introMain = film.querySelector('.intro-main');
   if (introMain?.tagName === 'MAIN') {
@@ -88,6 +112,11 @@
   const title = $('#intro-title');
   const description = $('#intro-description');
   const stage = $('#intro-stage');
+  const viewfinder = document.createElement('div');
+  viewfinder.className = 'intro-viewfinder';
+  viewfinder.setAttribute('aria-hidden', 'true');
+  viewfinder.innerHTML = '<i class="intro-view-corner"></i><i class="intro-view-corner"></i><i class="intro-view-corner"></i><i class="intro-view-corner"></i><i class="intro-view-center"></i><span class="intro-view-label">STASOS · OPTIC 01</span><span class="intro-view-lens">50 MM <b>F/1.8</b></span>';
+  stage.append(viewfinder);
   const kicker = $('#intro-kicker');
   const proof = $('#intro-proof');
   const stepCount = $('#intro-step-count');
@@ -123,8 +152,8 @@
 
   const marker = (scene, index) => {
     const visualHeader = `<div class="intro-screen-head"><span>STASOS / ${String(index + 1).padStart(2, '0')} — ${scene.id.toUpperCase()}</span><span class="intro-window-dots"><i></i><i></i><i></i></span></div>`;
-    if (scene.id === 'welcome') return `<div class="intro-scene-inner">${scene.visual}</div>`;
-    return `<div class="intro-scene-inner"><div class="intro-screen-glass">${visualHeader}<div class="intro-surface">${scene.visual}</div></div></div>`;
+    if (scene.id === 'welcome') return `<div class="intro-scene-inner"><div class="intro-camera-frame">${scene.visual}</div></div>`;
+    return `<div class="intro-scene-inner"><div class="intro-camera-frame"><div class="intro-screen-glass">${visualHeader}<div class="intro-surface">${scene.visual}</div></div></div></div>`;
   };
 
   function animateTitleGlyphs() {
@@ -230,10 +259,14 @@
   sizeParticles();
   drawParticles();
   const updatePointerParallax = (event) => {
+    const nx = event.clientX / Math.max(1, innerWidth) - .5;
+    const ny = event.clientY / Math.max(1, innerHeight) - .5;
     film.style.setProperty('--pointer-x', `${event.clientX}px`);
     film.style.setProperty('--pointer-y', `${event.clientY}px`);
-    film.style.setProperty('--pointer-tilt-x', `${(event.clientX / Math.max(1, innerWidth) - .5) * 1.6}deg`);
-    film.style.setProperty('--pointer-tilt-y', `${(.5 - event.clientY / Math.max(1, innerHeight)) * 1.3}deg`);
+    film.style.setProperty('--pointer-tilt-x', `${nx * 3.2}deg`);
+    film.style.setProperty('--pointer-tilt-y', `${-ny * 2.6}deg`);
+    film.style.setProperty('--camera-shift-x', `${nx * -26}px`);
+    film.style.setProperty('--camera-shift-y', `${ny * -18}px`);
   };
   const manageParticleVisibility = () => {
     cancelAnimationFrame(particleFrame);
@@ -311,6 +344,7 @@
       const part = Math.min(1, (sceneElapsed + performance.now() - startAt) / duration);
       const total = (index + part) / scenes.length * 100;
       progressFill.style.width = `${total}%`;
+      progressTrack.style.setProperty('--progress-marker', `${total}%`);
       progressTrack.setAttribute('aria-valuenow', String(Math.round(total)));
     }, 50);
     clearTimeout(sceneTimer);
