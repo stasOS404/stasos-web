@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07070a">
+  <meta name="description" content="Каталог фильмов и сериалов stasOS — отдельная анимационная сцена для каждой истории.">
+  <title>Фильмы и сериалы — stasOS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="enhancements.css">
+  <link rel="stylesheet" href="enhancements-pages.css">
+  <link rel="stylesheet" href="films.css">
+  <script src="script.js" defer></script>
+  <script src="enhancements.js" defer></script>
+  <script src="films.js" defer></script>
+</head>
+<body class="cinema-page">
+  <canvas id="bg-particles" aria-hidden="true"></canvas>
+  <div class="ambient ambient-one" aria-hidden="true"></div><div class="ambient ambient-two" aria-hidden="true"></div><div class="noise" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Перейти к содержимому</a>
+  <nav class="navbar" aria-label="Основная навигация">
+    <a class="logo" href="index.html"><span>stas</span>OS<i></i></a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav-links"><span></span><span></span></button>
+    <div class="nav-links" id="nav-links">
+      <a href="index.html#features">Возможности</a><a href="index.html#showcase">Интерфейс</a><a href="index.html#pricing">Тарифы</a>
+      <a href="films.html" class="cinema-nav-current" aria-current="page">Фильмы и сериалы</a><a href="roblox.html" class="nav-roblox"><i></i> Roblox Free</a>
+      <a href="https://t.me/stasOS_Cheat_bot" class="nav-cta">Открыть Telegram <span>↗</span></a>
+    </div>
+  </nav>
+
+  <main id="main" class="cinema-main">
+    <header class="cinema-hero" id="cinema-hero" data-featured="walking-dead">
+      <div class="cinema-hero-grain" aria-hidden="true"></div>
+      <div class="cinema-hero-grid" aria-hidden="true"></div>
+      <div class="cinema-hero-copy">
+        <div class="cinema-kicker"><i></i> STASOS CINEMA <b></b> КАТАЛОГ ИСТОРИЙ</div>
+        <p class="cinema-feature-tag" id="cinema-feature-tag">FEATURED SERIES / 2010</p>
+        <h1 class="cinema-feature-title" id="cinema-feature-title">Ходячие<br><span>мертвецы</span></h1>
+        <p class="cinema-feature-desc" id="cinema-feature-desc">Мир после катастрофы. Сигнал из пустоты. И истории людей, которые продолжают идти вперёд.</p>
+        <div class="cinema-feature-meta" id="cinema-feature-meta"><span>СЕРИАЛ</span><i></i><span>ДРАМА · ПОСТАПОКАЛИПСИС</span></div>
+        <div class="cinema-hero-actions"><a href="#catalog" class="cinema-button cinema-button-primary">Войти в каталог <span>↘</span></a><button class="cinema-button cinema-button-quiet" id="featured-random">Случайная история <span>⤨</span></button></div>
+      </div>
+      <div class="cinema-hero-art" id="cinema-feature-art" aria-hidden="true"><div class="cinema-art-scene art-walking-dead"><i class="art-sun"></i><i class="art-orbit"></i><i class="art-silhouette"></i><i class="art-signal">SIGNAL LOST</i></div><div class="cinema-title-stamp">01<span> / 04</span></div></div>
+      <div class="cinema-hero-footer"><span class="cinema-hero-caption"><i></i> КАЖДАЯ ИСТОРИЯ — СВОЯ ВСЕЛЕННАЯ</span><div class="featured-controls"><button id="featured-prev" type="button" aria-label="Предыдущая история">←</button><div class="featured-progress"><i id="featured-progress-fill"></i></div><span id="featured-counter">01 / 04</span><button id="featured-next" type="button" aria-label="Следующая история">→</button></div></div>
+      <div class="cinema-hero-index" aria-hidden="true">CINEMA / 001</div>
+    </header>
+
+    <section class="cinema-intro section-wrap">
+      <div class="cinema-section-code"><span>01</span> / THE COLLECTION</div>
+      <div class="cinema-intro-row"><h2>Большие истории.<br><span>Разные миры.</span></h2><p>Сериалы, фильмы и анимация — в каталоге, где у каждого тайтла собственный визуальный характер.</p></div>
+      <div class="cinema-stats"><span><b id="cinema-total">48</b> ИСТОРИЙ</span><i></i><span><b>02</b> ФОРМАТА</span><i></i><span><b>∞</b> МИРОВ</span></div>
+    </section>
+
+    <section class="cinema-catalog section-wrap" id="catalog">
+      <div class="cinema-catalog-head"><div><div class="cinema-section-code"><span>02</span> / FIND YOUR NEXT WORLD</div><h2>Выбирай,<br><span>куда исчезнуть.</span></h2></div><p>Наведи курсор или открой карточку — каждый мир оживает по-своему.</p></div>
+      <div class="cinema-toolbar">
+        <label class="cinema-search"><span>⌕</span><input id="cinema-search" type="search" aria-label="Поиск фильмов и сериалов" placeholder="Название, жанр или настроение…" autocomplete="off"><kbd>CTRL K</kbd></label>
+        <div class="cinema-filter-tabs" role="group" aria-label="Фильтр каталога"><button class="active" data-filter="all">Все <b>48</b></button><button data-filter="series">Сериалы</button><button data-filter="movie">Фильмы</button><button data-filter="favorites">Избранное <span>♡</span></button></div>
+      </div>
+      <div class="cinema-sort-row"><span id="cinema-results-label">ВСЯ КОЛЛЕКЦИЯ</span><button id="cinema-sort" type="button">ПОРЯДОК <b>ПО РЕКОМЕНДАЦИИ ↕</b></button></div>
+      <div class="cinema-grid" id="cinema-grid" aria-live="polite"></div>
+      <div class="cinema-empty" id="cinema-empty" hidden><div class="cinema-empty-mark">∅</div><h3>В этой вселенной пусто.</h3><p>Попробуй поменять запрос или фильтр.</p><button id="cinema-reset">Сбросить фильтры</button></div>
+    </section>
+
+    <section class="cinema-outro"><div class="cinema-outro-inner section-wrap"><span class="cinema-section-code"><span>03</span> / THE NEXT STORY</span><h2>Не знаешь,<br><span>что смотреть?</span></h2><p>Пусть выбор сделает случай.</p><button class="cinema-button cinema-button-primary" id="cinema-random-bottom">Выбрать за меня <span>⤨</span></button><i class="cinema-outro-orbit" aria-hidden="true"></i></div></section>
+  </main>
+
+  <footer class="site-footer"><a class="logo" href="index.html"><span>stas</span>OS<i></i></a><p>© <span data-year>2026</span> stasOS · Кино, сериалы и истории.</p><div class="footer-links"><a href="index.html">Главная</a><a href="about.html">Об авторе</a><a href="roblox.html">Roblox Free</a></div></footer>
+  <div class="cinema-modal" id="cinema-modal" aria-hidden="true"><div class="cinema-modal-backdrop" data-modal-close></div><article class="cinema-detail" role="dialog" aria-modal="true" aria-labelledby="detail-title" tabindex="-1"><button class="cinema-detail-close" data-modal-close aria-label="Закрыть">×</button><div class="cinema-detail-art" id="detail-art" aria-hidden="true"></div><div class="cinema-detail-copy"><div class="cinema-section-code" id="detail-code">STASOS CINEMA / TITLE</div><div class="cinema-detail-meta" id="detail-meta"></div><h2 id="detail-title"></h2><p id="detail-description"></p><div class="cinema-detail-tags" id="detail-tags"></div><button class="cinema-button cinema-button-primary" id="detail-favorite">Добавить в избранное <span>♡</span></button></div></article></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

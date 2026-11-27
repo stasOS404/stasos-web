@@ -270,11 +270,18 @@
         sceneElement.querySelector('.intro-mini-client')?.append(demoCursor);
       }
       if (scene.id === 'map') {
+        const cinemaLink = document.createElement('a');
+        cinemaLink.className = 'intro-map-link';
+        cinemaLink.href = 'films.html';
+        cinemaLink.dataset.introDestination = '';
+        cinemaLink.style.setProperty('--d', '900ms');
+        cinemaLink.innerHTML = '<small>10 / CINEMA</small><b>Фильмы и сериалы</b><span>Открыть каталог ↗</span>';
+        sceneElement.querySelector('.intro-map')?.append(cinemaLink);
         const route = document.createElement('div');
         route.className = 'intro-map-route';
         route.setAttribute('aria-hidden', 'true');
         route.innerHTML = `<svg viewBox="0 0 300 300" preserveAspectRatio="none"><path d="M50 48 C90 48 100 48 150 48 S210 48 250 48 L250 150 C250 202 210 252 150 252 S90 252 50 252 L50 150 C50 104 100 48 150 48"/></svg>`;
-        sceneElement.querySelector('.intro-map')?.prepend(route);
+        sceneElement.querySelector('.intro-map')?.append(route);
       }
       stage.append(sceneElement);
     }
