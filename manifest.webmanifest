@@ -1,0 +1,11 @@
+{
+  "name": "stasOS Cinema",
+  "short_name": "stasOS Cinema",
+  "description": "Личная кинотека stasOS",
+  "start_url": "./films.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#07070a",
+  "theme_color": "#07070a",
+  "icons": [{ "src": "cinema-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

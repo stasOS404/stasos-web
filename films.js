@@ -140,6 +140,7 @@
     $('#detail-code').textContent = `STASOS CINEMA / ${item.code}`;
     $('#detail-meta').textContent = `${item.type === 'series'?'СЕРИАЛ':'ФИЛЬМ'}  ·  ${item.year}  ·  ${item.genres.join(' / ').toUpperCase()}`;
     $('#detail-title').textContent = item.title;
+    document.dispatchEvent(new CustomEvent('stas-cinema-open-title', {detail:{item}}));
     $('#detail-description').textContent = item.desc;
     $('#detail-tags').innerHTML = item.genres.map((genre) => `<span>${htmlEscape(genre.toUpperCase())}</span>`).join('');
     updateDetailFavorite();
@@ -217,6 +218,7 @@
   $('#featured-random').addEventListener('click', chooseRandom);
   $('#cinema-random-bottom').addEventListener('click', chooseRandom);
 
+  window.stasCinema = {items, openDetail, get favoriteIds(){return new Set(favoriteIds);}};
   render();
   setFeature(0);
 })();
